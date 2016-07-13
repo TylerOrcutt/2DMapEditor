@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
 
 public class Engine {
@@ -20,7 +22,6 @@ public static boolean initEngine(GLAutoDrawable drawable) {
 	try{
 	BufferedReader vr = new BufferedReader(new FileReader("vertexshader.glsl"));
 	String line;
-    System.out.println(vr.lines().count());
     String [] lines= new String[(int)vr.lines().count()];
 	System.out.println("Loading Vertex Shader");
 	int i=0;
@@ -29,10 +30,22 @@ public static boolean initEngine(GLAutoDrawable drawable) {
 		i++;
 	}
 	vr.close();
+	
+	gl.glShaderSource(vertexShader, 1,lines, null);
+	gl.glCompileShader(vertexShader);
+
+	gl.glAttachShader(shaderProgram, vertexShader);
+	gl.glLinkProgram(shaderProgram);
+	gl.glUseProgram(shaderProgram);
+	gl.glEnable(GL.GL_TEXTURE_2D);
+	System.out.println(gl.glGetUniformLocation(shaderProgram,"vposy"));
 	}catch(Exception e){
  
 		return false;
 	}
+	
+	gl.glEnable(GL.GL_BLEND);
+	
     
 	return true;
 }
