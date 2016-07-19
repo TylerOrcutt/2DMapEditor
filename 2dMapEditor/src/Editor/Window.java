@@ -45,7 +45,7 @@ public class Window extends JFrame{
     JMenu menu = new JMenu("File");
   	this.add(menu,BorderLayout.NORTH);
 
-   GLProfile profle= GLProfile.get(GLProfile.GL3);
+  GLProfile profle= GLProfile.get(GLProfile.GL4);
    GLCapabilities cap = new GLCapabilities(profle);
    final GLCanvas canvas = new GLCanvas(cap);
      JPanel leftp = new JPanel();
@@ -74,9 +74,8 @@ public class Window extends JFrame{
         gl.glColor3f( 1, 1, 1 );
         gl.glVertex2f( x+100, y+100 );
         gl.glEnd();
-     
-        /**/
-	}
+     */
+   	}
 
 	@Override
 	public void dispose(GLAutoDrawable arg0) {
@@ -93,11 +92,11 @@ public class Window extends JFrame{
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
 
-		Engine.resize(drawable, x, y, w, h);
+	//	Engine.resize(drawable, x, y, w, h);
 		// TODO Auto-generated method stub
 		/*  gl.glMatrixMode( GL2.GL_PROJECTION );
 	       gl.glLoadIdentity();
-*/
+
 	        // coordinate system origin at lower left with width and height same as the window
 	//       GLU glu = new GLU();
 	   //     glu.gluOrtho2D( 0.0f, w, h, 0.0f );
@@ -105,7 +104,7 @@ public class Window extends JFrame{
 	     //   gl.glMatrixMode( GL2.GL_MODELVIEW );
 	      //  gl.glLoadIdentity();
 
-	      //  gl.glViewport( 0,0,w,h );
+	      //  gl.glViewport( 0,0,w,h );*/
 	}
 	   
    });
@@ -157,7 +156,7 @@ public class Window extends JFrame{
 	  
   });
   
-	
+
 	this.show();
 
 }

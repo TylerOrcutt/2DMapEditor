@@ -7,49 +7,36 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.util.glsl.ShaderCode;
+
+import Shaders.ShaderProgram;
+
 
 public class Engine {
-	static int shaderProgram;
-	static int vertexShader;
-	static int fragmentShader;
-public static boolean initEngine(GLAutoDrawable drawable) {
-	GL3 gl = drawable.getGL().getGL3();
-	shaderProgram = gl.glCreateProgram();
-	vertexShader = gl.glCreateShader(gl.GL_VERTEX_SHADER);
-	try{
-	BufferedReader vr = new BufferedReader(new FileReader("vertexshader.glsl"));
-	String line;
-    String [] lines= new String[(int)vr.lines().count()];
-	System.out.println("Loading Vertex Shader");
-	int i=0;
-	while((line=vr.readLine()) != null){
-		lines[i] = line;
-		i++;
-	}
-	vr.close();
-	
-	gl.glShaderSource(vertexShader, 1,lines, null);
-	gl.glCompileShader(vertexShader);
 
-	gl.glAttachShader(shaderProgram, vertexShader);
-	gl.glLinkProgram(shaderProgram);
-	gl.glUseProgram(shaderProgram);
-	gl.glEnable(GL.GL_TEXTURE_2D);
-	System.out.println(gl.glGetUniformLocation(shaderProgram,"vposy"));
-	}catch(Exception e){
- 
-		return false;
-	}
-	
-	gl.glEnable(GL.GL_BLEND);
-	
+	static ShaderProgram shaders;
+public static boolean initEngine(GLAutoDrawable drawable) {
+	GL4 gl = drawable.getGL().getGL4();
+    shaders = new ShaderProgram(gl,"vertexshader.glsl","fragmentshader.glsl");
     
 	return true;
 }
+private static void getAllFiles(File curDir) {
 
+    File[] filesList = curDir.listFiles();
+    for(File f : filesList){
+        //if(f.isDirectory())
+          //  getAllFiles(f);
+        if(f.isFile()){
+            System.out.println(f.getName());
+        }
+    }
+
+}
 public static void resize(GLAutoDrawable drawable,int x,int y, int width,int height){
 	GL3 gl = drawable.getGL().getGL3();
 	gl.glViewport(0,0,width,height);
