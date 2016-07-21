@@ -14,10 +14,14 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
 
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
@@ -29,8 +33,9 @@ import com.jogamp.opengl.awt.GLJPanel;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL3;
-
+import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.util.Animator;
 
 import Engine.Engine;
 
@@ -42,24 +47,55 @@ public class Window extends JFrame{
 	this.setSize(800,600);
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setTitle(title);
-    JMenu menu = new JMenu("File");
-  	this.add(menu,BorderLayout.NORTH);
+    JMenuBar menubar = new JMenuBar( );
+      JMenu fileMenu = new JMenu("File");
+      
+      menubar.add(fileMenu);
+      
+      JMenu newMenu = new JMenu("New");
+      fileMenu.add(newMenu);
+      newMenu.add(new JMenuItem("Map"));
+      
+      fileMenu.addSeparator();
+      fileMenu.add(new JMenuItem("Import"));
+      fileMenu.addSeparator();
+      newMenu = new JMenu("Export");
+      fileMenu.add(newMenu);
+      newMenu.add(new JMenuItem("JSON"));
+      newMenu.add(new JMenuItem("Block"));
+      fileMenu.addSeparator();
+      
+ 
+      fileMenu.addSeparator();
+      fileMenu.add(new JMenuItem("Exit"));
+      
+      fileMenu = new JMenu("View");
+      fileMenu.add(new JCheckBoxMenuItem("Show Grid",true));
+      menubar.add(fileMenu);
+      
+      
+    this.setJMenuBar(menubar);
 
-  GLProfile profle= GLProfile.get(GLProfile.GL4);
+    JToolBar toolbar = new JToolBar();
+    toolbar.add(new JButton("Test"));
+    this.add(toolbar,BorderLayout.NORTH);
+
+  GLProfile profle= GLProfile.get(GLProfile.GL2);
    GLCapabilities cap = new GLCapabilities(profle);
    final GLCanvas canvas = new GLCanvas(cap);
-     JPanel leftp = new JPanel();
+
      float x=100,y=200;
   //  JSplitPane 
-     this.add(leftp, BorderLayout.WEST);
-    leftp.add(new Button("test"));
-   
+
      canvas.addGLEventListener(new GLEventListener(){
 	@Override
-	public void display(GLAutoDrawable arg0) {
-		GL3 gl= arg0.getGL().getGL3();
+	public void display(GLAutoDrawable drawable) {
+		GL2 gl= drawable.getGL().getGL2();
 		// TODO Auto-generated method stub
-	    gl.glClear( GL.GL_COLOR_BUFFER_BIT );
+		//gl.glClearColor(1, 1, 1, 1);
+         
+		gl.glClear( GL.GL_COLOR_BUFFER_BIT );
+	    Engine.Render(drawable);
 
        // draw a triangle filling the window
   /*      gl.glLoadIdentity();
@@ -105,10 +141,23 @@ public class Window extends JFrame{
 	      //  gl.glLoadIdentity();
 
 	      //  gl.glViewport( 0,0,w,h );*/
+	Engine.resize(drawable, x, y, w, h);
+	
 	}
 	   
    });
-   this.add(canvas, BorderLayout.CENTER);
+     Animator ani = new Animator();
+     ani.setUpdateFPSFrames(60, null);
+      
+ 
+     JPanel leftp = new JPanel();
+     JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,leftp,canvas);
+     this.add(splitpane,BorderLayout.CENTER);
+     ani.add(canvas);
+     ani.start();
+    leftp.add(new Button("test"));
+    splitpane.setOneTouchExpandable(true);
+    splitpane.setDividerLocation(150);
   this.addWindowListener(new WindowListener(){
 
 	@Override
@@ -120,7 +169,7 @@ public class Window extends JFrame{
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-	
+	 canvas.destroy();
 		
 	}
 

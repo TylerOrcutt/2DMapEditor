@@ -5,46 +5,33 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.nio.IntBuffer;
 
+import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.util.glsl.ShaderCode;
 public class ShaderProgram {
 	enum GL_SHADER_TYPE{vertex,fragment};
 	
-	private int programID;// vertexShader,fragmentShader;
-	private GL4 gl;
-	
-	
-	public ShaderProgram(GL4 gl,String[] vertexShaderSource, String []fragmentShaderSource){
+
+	private GL2 gl;
+	private 	    com.jogamp.opengl.util.glsl.ShaderProgram program ;
+
+	public ShaderProgram(GL2 gl,String shaderFile,String fragmentFile){
 		this.gl = gl;
-		/*programID=gl.glCreateProgram();
-		vertexShader = loadProgram(gl.GL_VERTEX_SHADER, vertexShaderSource);
-	    fragmentShader = loadProgram(gl.GL_FRAGMENT_SHADER,fragmentShaderSource);
-	    gl.glActiveShaderProgram(programID, vertexShader);
-	    gl.glActiveShaderProgram(programID, fragmentShader);
-	    gl.glLinkProgram(programID);
-	    gl.glValidateProgram(programID);
-	   // gl.glGetAttribLocation(programID, "vposx");
-	    gl.glUseProgram(programID);
-	   */
+
 		
 	    ShaderCode vertexShader = ShaderCode.create(gl, gl.GL_VERTEX_SHADER, this.getClass(), ".", null, "vertexshader", "glsl", null, true);
 	    
 	    ShaderCode fragmentShader = ShaderCode.create(gl, gl.GL_FRAGMENT_SHADER, this.getClass(), ".", null, "fragmentshader", "glsl", null, true);
-	    com.jogamp.opengl.util.glsl.ShaderProgram program = new  com.jogamp.opengl.util.glsl.ShaderProgram();
+	    program = new  com.jogamp.opengl.util.glsl.ShaderProgram();
 	    program.add(vertexShader);
 	    program.add(fragmentShader);
 	    program.link(gl, System.out);
 	   //program.useProgram(gl, true);
-	   gl.glUseProgram(program.id());
+	  gl.glUseProgram(program.id());
 		
-    System.out.println(gl.glGetAttribLocation(program.id(), "vPosition")); 
-    System.out.println(gl.glGetUniformLocation(program.id(),"vposy")); 
- 
-	}
-	
-	public ShaderProgram(GL4 gl,String shaderFile,String fragmentFile){
-		this(gl,getProgramSource(shaderFile),getProgramSource(fragmentFile));		
+  //  System.out.println(gl.glGetAttribLocation(program.id(), "vPosition")); 
+    //System.out.println(gl.glGetUniformLocation(program.id(),"vposy")); 	
 	}
 	
 	public static String[] getProgramSource(String file){
@@ -81,12 +68,15 @@ public class ShaderProgram {
 	}
 	
 	public int loadProgram(int type, String []source){
-		System.out.println("Loading shader...");
+		/*System.out.println("Loading shader...");
 		int shaderid=gl.glCreateShader(type);
 		gl.glShaderSource(shaderid, 0, source,  (int[])null, 0);
 		gl.glCompileShader(shaderid);
-
-		return shaderid;	
+*/
+		return -1;	
+	}
+	public int id(){
+		return program.id();
 	}
 
 }

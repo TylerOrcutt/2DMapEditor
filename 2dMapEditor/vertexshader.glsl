@@ -15,7 +15,7 @@ varying vec2 v_texCoord;
     position.x=position.x*vScaleX + vposx;
     position.y=position.y*vScaleY + vposy;
 
-    gl_Position = uMVPMatrix * position;
+    gl_Position =  position;
     vec2 txtpos = a_texCoord;
     txtpos.x=txtpos.x*tScaleX+tposx ; 
     txtpos.y=txtpos.y*tScaleY+tposy ;
