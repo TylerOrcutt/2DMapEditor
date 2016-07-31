@@ -20,9 +20,9 @@ public class ShaderProgram {
 		this.gl = gl;
 
 		
-	    ShaderCode vertexShader = ShaderCode.create(gl, gl.GL_VERTEX_SHADER, this.getClass(), ".", null, "vertexshader", "glsl", null, true);
+	    ShaderCode vertexShader = ShaderCode.create(gl, gl.GL_VERTEX_SHADER, this.getClass(), ".", null, "shaders/vertexshader", "glsl", null, true);
 	    
-	    ShaderCode fragmentShader = ShaderCode.create(gl, gl.GL_FRAGMENT_SHADER, this.getClass(), ".", null, "fragmentshader", "glsl", null, true);
+	    ShaderCode fragmentShader = ShaderCode.create(gl, gl.GL_FRAGMENT_SHADER, this.getClass(), ".", null, "shaders/fragmentshader", "glsl", null, true);
 	    program = new  com.jogamp.opengl.util.glsl.ShaderProgram();
 	    program.add(vertexShader);
 	    program.add(fragmentShader);
