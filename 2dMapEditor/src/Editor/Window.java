@@ -8,6 +8,10 @@ import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -79,7 +83,7 @@ public class Window extends JFrame{
       fileMenu = new JMenu("View");
       fileMenu.add(new JCheckBoxMenuItem("Show Grid",true));
       menubar.add(fileMenu);
-      
+ 
       
     this.setJMenuBar(menubar);
 
@@ -152,19 +156,7 @@ public class Window extends JFrame{
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
 
-	//	Engine.resize(drawable, x, y, w, h);
-		// TODO Auto-generated method stub
-		/*  gl.glMatrixMode( GL2.GL_PROJECTION );
-	       gl.glLoadIdentity();
-
-	        // coordinate system origin at lower left with width and height same as the window
-	//       GLU glu = new GLU();
-	   //     glu.gluOrtho2D( 0.0f, w, h, 0.0f );
-
-	     //   gl.glMatrixMode( GL2.GL_MODELVIEW );
-	      //  gl.glLoadIdentity();
-
-	      //  gl.glViewport( 0,0,w,h );*/
+ 
 	Engine.resize(drawable, x, y, w, h);
 	
 	}
@@ -175,9 +167,6 @@ public class Window extends JFrame{
       
  
      JPanel leftp = new JPanel(new BorderLayout());
- 
-  //   final GLCanvas canvas2 = new GLCanvas(cap);
-   
     
 
      JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftp,canvas);
@@ -188,6 +177,61 @@ public class Window extends JFrame{
    // splitpane.setOneTouchExpandable(true);
     splitpane.setDividerLocation(250);
     splitpane.setResizeWeight(.5);
+    canvas.addKeyListener(new KeyListener() {
+		
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+			Engine.KeyRelease(e);
+		}
+		
+		@Override
+		public void keyPressed(KeyEvent e) {
+	 
+		}
+	});
+    
+    canvas.addMouseListener(new MouseListener() {
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+			
+		}
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			Engine.MousePress(e);
+			
+		}
+		
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	});
    
  
 

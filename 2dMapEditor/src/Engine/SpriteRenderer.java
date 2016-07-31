@@ -134,33 +134,17 @@ public static FloatBuffer genVertexBuffer(float renderWidth,float renderHeight){
   
     FloatBuffer buf;
    ByteBuffer bb = ByteBuffer.allocateDirect(
-            // (# of coordinate values * 4 bytes per float)
             recCoords.length * 4);
     bb.order(ByteOrder.nativeOrder());
     buf = bb.asFloatBuffer();
     buf.put(recCoords);
     buf.position(0);
- /**//*
-  buf = FloatBuffer.allocate(recCoords.length);
-   buf.put(recCoords);
-   buf.flip(); 
-  //  buf = FloatBuffer.wrap(recCoords);*/
+
     return buf;
 
 }
 public static FloatBuffer genTextureBuffer(float spriteWidth, float spriteHeight){
     float textcords[]={
-
- 
-    	
-    	
-    		/*  0,spriteHeight,
-    		  spriteWidth,spriteHeight,
-    	
-    		  
-    		   0,0, 
-    	   spriteWidth,0,
-    	*/
     		0,0,
     		  spriteWidth,0,
     		  0,spriteHeight,

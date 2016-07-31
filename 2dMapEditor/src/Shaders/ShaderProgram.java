@@ -34,48 +34,7 @@ public class ShaderProgram {
 
  	
 	}
-	
-	public static String[] getProgramSource(String file){
-	String[] src;
-	
-	 System.out.println("Reading shader File.");
-		try{
-	    String line;
-	    BufferedReader reader = new BufferedReader(new FileReader(new File(file)));
-	    //System.out.println("Lines: " + reader.lines().count());
-	    int i=0;
-	    src= new String[(int)reader.lines().count()];
-	    reader.close();
-	    reader = new BufferedReader(new FileReader(new File(file)));
-	  //line=reader.readLine();
-		//System.out.println(line);
-	    
-	    while((line=reader.readLine())!=null){
-	    	src[i]=line;
-	 //   	System.out.println(src[i]);
-	    	i++;
-	  	//  line=reader.readLine();
-	    }
-	    
-	    reader.close();
-	    return null;
-	    ///loadProgram(type, src);
-	}catch(Exception E){
 
-			return null;
-	}
-	
-	//return null;
-	}
-	
-	public int loadProgram(int type, String []source){
-		/*System.out.println("Loading shader...");
-		int shaderid=gl.glCreateShader(type);
-		gl.glShaderSource(shaderid, 0, source,  (int[])null, 0);
-		gl.glCompileShader(shaderid);
-*/
-		return -1;	
-	}
 	public int id(){
 		return program.id();
 	}

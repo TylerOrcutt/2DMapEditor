@@ -1,5 +1,7 @@
 package Engine;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,6 +16,7 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.glsl.ShaderCode;
 
+import Camera.Camera;
 import Shaders.ShaderProgram;
 
 
@@ -21,8 +24,11 @@ public class Engine {
 
 	static ShaderProgram shaders;
   public static int width,height;
+
   public static SpriteSheet sp;
-  public static SpriteSheet sp2;
+  public static Sprite sprite;
+  public static Camera camera;
+  public static ArrayList<Sprite> sprites;
 public static boolean initEngine(GLAutoDrawable drawable) {
 	GL2 gl = drawable.getGL().getGL2();
 
@@ -40,8 +46,12 @@ public static boolean initEngine(GLAutoDrawable drawable) {
      gl.glShadeModel(GL2.GL_SMOOTH); 
      gl.glClearDepth(1.0f);  
 	//gl.glOrtho(0,  width, height, 0, 0,1);
-    sp = new SpriteSheet(gl,"images/sp2.png", 1, 1);
-    sp2 = new SpriteSheet(gl,"images/sp2.png", 10, 10);
+
+    sp= new SpriteSheet(gl,"images/sp2.png", 10, 10); 
+    //sprite = new Sprite(sp);
+    //sprite.setImgLoc(0, 1);
+    sprites  = new ArrayList<Sprite>();
+    camera = new Camera();
 	return true;
 }
 private static void getAllFiles(File curDir) {
@@ -63,6 +73,7 @@ public static void resize(GLAutoDrawable drawable,int x,int y, int width,int hei
 
    Engine.width=width;
     Engine.height=height;
+    camera.resize(width, height);
 
     SpriteRenderer.Resize(gl, width, height);
 
@@ -71,9 +82,42 @@ public static void Render(GLAutoDrawable drawable){
 	GL2 gl = drawable.getGL().getGL2();
 	//System.out.println("Draw");
 	 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); 
-	 sp.draw(gl,0,0,320,320,0,0);
-	 sp2.draw(gl,320,320,320,320, 0,1);
-
+ 
+    for (Sprite sprite : sprites) {
+		sprite.Draw(gl, camera);
+	}
  
 }
+
+public static void KeyRelease(KeyEvent e){
+ 
+	if(e.getKeyChar()=='w'){
+     camera.move(camera.getX(), camera.getY()-32);
+	}
+	
+	if(e.getKeyChar()=='s'){
+	     camera.move(camera.getX(), camera.getY()+32);
+		}
+	if(e.getKeyChar()=='a'){
+	     camera.move(camera.getX()-32, camera.getY());
+		}
+	if(e.getKeyChar()=='d'){
+	     camera.move(camera.getX()+32, camera.getY());
+		}
+}
+
+public static void MousePress(MouseEvent e){
+	System.out.println("mouseX: "+ ( e.getX()+camera.getX()) + "   MouseY: " + (e.getY()+camera.getY()));
+	float mouseX = e.getX()+camera.getX();
+    float mouseY = e.getY()+camera.getY();
+	float posx=32.0f*(float)Math.floor(mouseX/32);
+	float posy=32.0f*(float)Math.floor(mouseY/32);
+	Sprite s = new Sprite(sp);
+	s.setImgLoc(0, 1);
+	s.move(posx, posy);
+	sprites.add(s);
+	
+	
+}
+
 }
