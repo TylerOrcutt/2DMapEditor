@@ -107,7 +107,9 @@ public static void KeyRelease(KeyEvent e){
 }
 
 public static void MousePress(MouseEvent e){
-	System.out.println("mouseX: "+ ( e.getX()+camera.getX()) + "   MouseY: " + (e.getY()+camera.getY()));
+	System.out.println("Button" +e.getButton()+ "    mouseX: "+ ( e.getX()+camera.getX()) + "   MouseY: " + (e.getY()+camera.getY()));
+	
+	if(e.getButton()==1){
 	float mouseX = e.getX()+camera.getX();
     float mouseY = e.getY()+camera.getY();
 	float posx=32.0f*(float)Math.floor(mouseX/32);
@@ -116,8 +118,22 @@ public static void MousePress(MouseEvent e){
 	s.setImgLoc(0, 1);
 	s.move(posx, posy);
 	sprites.add(s);
-	
-	
+	}
+	if(e.getButton()==3){
+		float mouseX = e.getX()+camera.getX();
+	    float mouseY = e.getY()+camera.getY();
+		float posx=32.0f*(float)Math.floor(mouseX/32);
+		float posy=32.0f*(float)Math.floor(mouseY/32);
+	    for (int i=0;i<sprites.size();i++) {
+	    	
+			if(sprites.get(i).getX()==posx && sprites.get(i).getY()==posy){
+			  sprites.remove(i);
+			  break;
+			}
+		}
+		
+		
+	}
 }
 
 }
