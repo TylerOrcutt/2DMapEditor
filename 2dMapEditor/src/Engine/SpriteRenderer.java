@@ -4,10 +4,15 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL4;
+import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.math.Matrix4;
+import com.jogamp.opengl.util.PMVMatrix;
 
 import Shaders.ShaderProgram;
 
@@ -20,7 +25,7 @@ public static final int COORDS_PER_VERTEX=3;
 public static int cubeVAOID[];
 public static int cubeVBOID[];
 public static FloatBuffer cubeData;
-public static final short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; 
+public static ShortBuffer drawOrder;
 
 public static int vPosition;
 public static int vPosx;
@@ -32,83 +37,101 @@ public static int tPosy;
 public static int tScalex;
 public static int tScaley;
 public static int uMVPmatrix;
+public static int Mmatrix;
+public static int Pmatrix;
+public static int Vmatrix;
+
+
+
 
 static float viewMatrix[];
 public static void init(GL2 gl,ShaderProgram shaderProgram){
 		SpriteRenderer.gl=gl;
+		gl.glEnable(gl.GL_TEXTURE_2D);
+		   gl.glEnable(gl.GL_BLEND);
+		   gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE_MINUS_SRC_ALPHA);
 		SpriteRenderer.shaderProgram = shaderProgram;
 		gl.glUseProgram(shaderProgram.id());
-		
-	
-		gl.glGetUniformLocation(vPosx, "vposx");
-		gl.glGetUniformLocation(vPosy, "vposy");
-		gl.glGetUniformLocation(vScalex, "vScaleX");
-		gl.glGetUniformLocation(vScaley, "vScaleY");
-		
-		gl.glGetUniformLocation(tPosx, "tposx");
-		gl.glGetUniformLocation(tPosy, "tposy");
-		gl.glGetUniformLocation(tScalex, "tScaleX");
-		gl.glGetUniformLocation(tScaley, "tScaleY");
-		gl.glGetUniformLocation(uMVPmatrix, "uMVPMatrix");
-		vPosition = gl.glGetAttribLocation(shaderProgram.id(), "vPosition");
-		
-		
-        cubeVAOID = new int[1];
-	//	gl.glGenVertexArrays(1, cubeVAOID, 0);
-		//gl.glBindVertexArray(cubeVAOID[0]);
-	
-	
-		cubeVBOID = new int[1];
-		gl.glGenBuffers(1, cubeVBOID,0);
-		gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, cubeVBOID[0]);
-		
-		gl.glVertexAttribPointer(vPosition, COORDS_PER_VERTEX,gl.GL_FLOAT, false,  0,0);
-		gl.glEnableVertexAttribArray(vPosition);
-		
-		
-		cubeData= genVertexBuffer(1, 1);
-		gl.glBufferData(gl.GL_ARRAY_BUFFER, cubeData.capacity()*Float.BYTES, cubeData, GL4.GL_STATIC_DRAW);
-		
-		
-		System.out.println(cubeVAOID[0]);
-		//gl.glVertexAttribPointer(arg0, arg1, arg2, arg3, arg4, arg5);
-		
-		
-		
-		 viewMatrix = new float[16];
-		for(int i=0;i<16;i++){
-			viewMatrix[i]=0.f;
-		}
-		
-	
-		gl.glProgramUniformMatrix4fv(uMVPmatrix, 1, 0, false, viewMatrix, 0);
-	
-	
+	  gl.glEnableClientState(gl.GL_VERTEX_ARRAY);
+	 	  gl.glEnable(GL2.GL_DEPTH_TEST);
+	vPosx=gl.glGetUniformLocation(shaderProgram.id(), "vposx");
+	vPosy=	gl.glGetUniformLocation(shaderProgram.id(), "vposy");
+	 vScalex=gl.glGetUniformLocation(shaderProgram.id(), "vScaleX");
+	 vScaley=gl.glGetUniformLocation(shaderProgram.id(), "vScaleY");
+	tPosx=	gl.glGetUniformLocation(shaderProgram.id(), "tposx");
+	tPosy=	gl.glGetUniformLocation(shaderProgram.id(), "tposy");
+	tScalex=	gl.glGetUniformLocation(shaderProgram.id(), "tScaleX");
+	tScaley=	gl.glGetUniformLocation(shaderProgram.id(), "tScaleY");
+
+cubeData= genVertexBuffer(1, 1);
+gl.glEnableVertexAttribArray(vPosition);
+	   gl.glVertexAttribPointer(vPosition, 3, gl.GL_FLOAT, false, 12, cubeData);
+	 	gl.glDisableVertexAttribArray(vPosition);
+
+
 	
 }
-public static void Draw(GL2 gl){
-	gl.glEnableVertexAttribArray(vPosition); 
-	gl.glUniform1f(vPosx, 0);
-	gl.glUniform1f(vPosy, 0);
-	gl.glUniform1f(vScalex, 100);
-	gl.glUniform1f(vScaley, 100);
-	gl.glDrawArrays(GL.GL_TRIANGLE_STRIP, 0, cubeData.capacity()/COORDS_PER_VERTEX);
+public static void Resize(GL2 gl, float width,float height){
+	gl.glUseProgram(shaderProgram.id());
+    gl.glEnable(gl.GL_BLEND);
+gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE_MINUS_SRC_ALPHA);
+ 
+ 
+		
+
+gl.glMatrixMode(GL2.GL_PROJECTION);
+gl.glLoadIdentity();
+
+
+gl.glOrtho(0, width, height,0, 0,50);
+
+gl.glMatrixMode(GL2.GL_MODELVIEW);
+gl.glLoadIdentity();
+
+
+	
+ 
+
+}
+
+public static void Draw(GL2 gl,float x,float y,float width,float height){
+	//System.out.println("sprite draw");
+	gl.glUseProgram(shaderProgram.id());
+ 
+
+	 	 gl.glEnableVertexAttribArray(vPosition);
+	   gl.glUniform1f(vPosx, x);
+	gl.glUniform1f(vPosy, y);
+	gl.glUniform1f(vScalex, width);
+	gl.glUniform1f(vScaley, height);
+
+gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, cubeData.capacity()/3);
+
+
+gl.glDisableVertexAttribArray(vPosition);
+
 }
 
 public static FloatBuffer genVertexBuffer(float renderWidth,float renderHeight){
     float recCoords[]=  { 0.f, 0.f, 0.0f,
-            renderWidth, 0.f, 0.0f,
+           renderWidth, 0.f, 0.0f,
             0.f,  renderHeight, 0.0f,
             renderWidth,  renderHeight, 0.0f
     };
+  
     FloatBuffer buf;
-    ByteBuffer bb = ByteBuffer.allocateDirect(
+   ByteBuffer bb = ByteBuffer.allocateDirect(
             // (# of coordinate values * 4 bytes per float)
             recCoords.length * 4);
     bb.order(ByteOrder.nativeOrder());
     buf = bb.asFloatBuffer();
     buf.put(recCoords);
     buf.position(0);
+ /**//*
+  buf = FloatBuffer.allocate(recCoords.length);
+   buf.put(recCoords);
+   buf.flip(); 
+  //  buf = FloatBuffer.wrap(recCoords);*/
     return buf;
 
 }

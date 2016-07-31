@@ -4,15 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -41,14 +45,17 @@ import Engine.Engine;
 
 public class Window extends JFrame{
 	//private static final Engine engine;
+	
 	  private  boolean closeRequested = false;
 	  private final AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
 	public Window(String title){
-	this.setSize(800,600);
+ 
+		this.setSize(800,600);
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setTitle(title);
     JMenuBar menubar = new JMenuBar( );
       JMenu fileMenu = new JMenu("File");
+      this.setIconImage(new ImageIcon("images/logo.png").getImage());
       
       menubar.add(fileMenu);
       
@@ -77,31 +84,48 @@ public class Window extends JFrame{
     this.setJMenuBar(menubar);
 
     JToolBar toolbar = new JToolBar();
+    JButton btn = new JButton("");
+    btn.setIcon(new ImageIcon("images/cursor.png"));
+    toolbar.add(btn);
+    
+    btn = new JButton("");
+    btn.setIcon(new ImageIcon("images/brush.png"));
+    toolbar.add(btn);
+    btn = new JButton("");
+    btn.setIcon(new ImageIcon("images/blocked.png"));
+    toolbar.add(btn);
+    btn = new JButton("");
+    btn.setIcon(new ImageIcon("images/redspawn.png"));
+    toolbar.add(btn);
+    btn = new JButton("");
+    btn.setIcon(new ImageIcon("images/bluespawn.png"));
+    toolbar.add(btn);
     toolbar.add(new JButton("Test"));
+    
     this.add(toolbar,BorderLayout.NORTH);
 
   GLProfile profle= GLProfile.get(GLProfile.GL2);
    GLCapabilities cap = new GLCapabilities(profle);
    final GLCanvas canvas = new GLCanvas(cap);
-
-     float x=100,y=200;
+ final float x=100, y=100;
   //  JSplitPane 
 
      canvas.addGLEventListener(new GLEventListener(){
 	@Override
 	public void display(GLAutoDrawable drawable) {
-		GL2 gl= drawable.getGL().getGL2();
-		// TODO Auto-generated method stub
-		//gl.glClearColor(1, 1, 1, 1);
+		GL3 gl= drawable.getGL().getGL3();
+ 
          
 		gl.glClear( GL.GL_COLOR_BUFFER_BIT );
-	    Engine.Render(drawable);
+	//    gl.glLoadIdentity();
+		Engine.Render(drawable);
 
        // draw a triangle filling the window
-  /*      gl.glLoadIdentity();
-        gl.glBegin( GL.GL_TRIANGLE_STRIP );
+ 
+   
+     //   gl.glBegin( GL.GL_TRIANGLE_STRIP );
        
-        gl.glColor3f( 1, 0, 0 );
+       /* gl.glColor3f( 1, 0, 0 );
         gl.glVertex2f( x, y );
         gl.glColor3f( 0, 1, 0 );
         gl.glVertex2f(x, y+100 );
@@ -110,7 +134,7 @@ public class Window extends JFrame{
         gl.glColor3f( 1, 1, 1 );
         gl.glVertex2f( x+100, y+100 );
         gl.glEnd();
-     */
+    */
    	}
 
 	@Override
@@ -150,14 +174,23 @@ public class Window extends JFrame{
      ani.setUpdateFPSFrames(60, null);
       
  
-     JPanel leftp = new JPanel();
-     JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,leftp,canvas);
+     JPanel leftp = new JPanel(new BorderLayout());
+ 
+  //   final GLCanvas canvas2 = new GLCanvas(cap);
+   
+    
+
+     JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftp,canvas);
      this.add(splitpane,BorderLayout.CENTER);
+   
      ani.add(canvas);
      ani.start();
-    leftp.add(new Button("test"));
-    splitpane.setOneTouchExpandable(true);
-    splitpane.setDividerLocation(150);
+   // splitpane.setOneTouchExpandable(true);
+    splitpane.setDividerLocation(250);
+    splitpane.setResizeWeight(.5);
+   
+ 
+
   this.addWindowListener(new WindowListener(){
 
 	@Override

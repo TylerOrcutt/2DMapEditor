@@ -27,11 +27,12 @@ public class ShaderProgram {
 	    program.add(vertexShader);
 	    program.add(fragmentShader);
 	    program.link(gl, System.out);
-	   //program.useProgram(gl, true);
+	   
+ 
 	  gl.glUseProgram(program.id());
 		
-  //  System.out.println(gl.glGetAttribLocation(program.id(), "vPosition")); 
-    //System.out.println(gl.glGetUniformLocation(program.id(),"vposy")); 	
+
+ 	
 	}
 	
 	public static String[] getProgramSource(String file){
