@@ -21,6 +21,8 @@ public class Engine {
 
 	static ShaderProgram shaders;
   public static int width,height;
+  public static SpriteSheet sp;
+  public static SpriteSheet sp2;
 public static boolean initEngine(GLAutoDrawable drawable) {
 	GL2 gl = drawable.getGL().getGL2();
 
@@ -38,7 +40,8 @@ public static boolean initEngine(GLAutoDrawable drawable) {
      gl.glShadeModel(GL2.GL_SMOOTH); 
      gl.glClearDepth(1.0f);  
 	//gl.glOrtho(0,  width, height, 0, 0,1);
-    
+    sp = new SpriteSheet(gl,"images/sp2.png", 1, 1);
+    sp2 = new SpriteSheet(gl,"images/sp2.png", 10, 10);
 	return true;
 }
 private static void getAllFiles(File curDir) {
@@ -68,8 +71,9 @@ public static void Render(GLAutoDrawable drawable){
 	GL2 gl = drawable.getGL().getGL2();
 	//System.out.println("Draw");
 	 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); 
+	 sp.draw(gl,0,0,320,320,0,0);
+	 sp2.draw(gl,320,320,320,320, 0,1);
 
-  SpriteRenderer.Draw(gl,0,0,32,32);
  
 }
 }

@@ -25,7 +25,7 @@ public static final int COORDS_PER_VERTEX=3;
 public static int cubeVAOID[];
 public static int cubeVBOID[];
 public static FloatBuffer cubeData;
-public static ShortBuffer drawOrder;
+public static FloatBuffer TextureData;
 
 public static int vPosition;
 public static int vPosx;
@@ -36,10 +36,8 @@ public static int tPosx;
 public static int tPosy;
 public static int tScalex;
 public static int tScaley;
-public static int uMVPmatrix;
-public static int Mmatrix;
-public static int Pmatrix;
-public static int Vmatrix;
+public static int mTextLoc;
+public static int mSamplerLoc;
 
 
 
@@ -62,14 +60,23 @@ public static void init(GL2 gl,ShaderProgram shaderProgram){
 	tPosy=	gl.glGetUniformLocation(shaderProgram.id(), "tposy");
 	tScalex=	gl.glGetUniformLocation(shaderProgram.id(), "tScaleX");
 	tScaley=	gl.glGetUniformLocation(shaderProgram.id(), "tScaleY");
-
+	mSamplerLoc=	gl.glGetUniformLocation(shaderProgram.id(), "s_texture");
+	vPosition= gl.glGetAttribLocation(shaderProgram.id(), "vPosition");
+    mTextLoc= gl.glGetAttribLocation(shaderProgram.id(), "a_texCoord");
 cubeData= genVertexBuffer(1, 1);
+
+
+System.out.println(mSamplerLoc);
 gl.glEnableVertexAttribArray(vPosition);
 	   gl.glVertexAttribPointer(vPosition, 3, gl.GL_FLOAT, false, 12, cubeData);
 	 	gl.glDisableVertexAttribArray(vPosition);
+	 	
+	 	TextureData= genTextureBuffer(1, 1);
+	 	gl.glEnableVertexAttribArray(mTextLoc);
+	 		   gl.glVertexAttribPointer(mTextLoc, 2, gl.GL_FLOAT, false,0, TextureData);
+	 		 	gl.glDisableVertexAttribArray(mTextLoc);
 
-
-	
+	 			gl.glUniform1i(mSamplerLoc, 0);
 }
 public static void Resize(GL2 gl, float width,float height){
 	gl.glUseProgram(shaderProgram.id());
@@ -94,19 +101,25 @@ gl.glLoadIdentity();
 
 }
 
-public static void Draw(GL2 gl,float x,float y,float width,float height){
+public static void Draw(GL2 gl,float x,float y,float width,float height,float imgx,float imgy,float imgwidth,float imgheight){
 	//System.out.println("sprite draw");
 	gl.glUseProgram(shaderProgram.id());
  
 
 	 	 gl.glEnableVertexAttribArray(vPosition);
+
+	 	 gl.glEnableVertexAttribArray(mTextLoc);
+ gl.glUniform1i(mSamplerLoc, 0);
 	   gl.glUniform1f(vPosx, x);
 	gl.glUniform1f(vPosy, y);
 	gl.glUniform1f(vScalex, width);
 	gl.glUniform1f(vScaley, height);
-
+	   gl.glUniform1f(tPosx, imgx);
+	gl.glUniform1f(tPosy, imgy);
+	gl.glUniform1f(tScalex, imgwidth);
+	gl.glUniform1f(tScaley, imgheight);
 gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, cubeData.capacity()/3);
-
+gl.glDisableVertexAttribArray(mTextLoc);
 
 gl.glDisableVertexAttribArray(vPosition);
 
@@ -134,5 +147,33 @@ public static FloatBuffer genVertexBuffer(float renderWidth,float renderHeight){
   //  buf = FloatBuffer.wrap(recCoords);*/
     return buf;
 
+}
+public static FloatBuffer genTextureBuffer(float spriteWidth, float spriteHeight){
+    float textcords[]={
+
+ 
+    	
+    	
+    		/*  0,spriteHeight,
+    		  spriteWidth,spriteHeight,
+    	
+    		  
+    		   0,0, 
+    	   spriteWidth,0,
+    	*/
+    		0,0,
+    		  spriteWidth,0,
+    		  0,spriteHeight,
+  	 
+ 	  spriteWidth,spriteHeight,  
+              
+    };
+      ByteBuffer   buff = ByteBuffer.allocateDirect(textcords.length * 4);
+      buff.order(ByteOrder.nativeOrder());
+     FloatBuffer textVert  = buff.asFloatBuffer();
+      textVert .put(textcords);
+ 
+      textVert .position(0);
+ return textVert;
 }
 }
