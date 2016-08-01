@@ -16,7 +16,7 @@ public void Draw(GL2 gl){
 	gl.glColor4f(.44f, .44f, .44f, .50f);
 	SpriteRenderer.setUseTexture(false);
 	for (Sprite sprite : lines) {
-		sprite.Draw(gl);
+		sprite.Draw(gl,Engine.scale);
 	}
 	SpriteRenderer.setUseTexture(true);
 }

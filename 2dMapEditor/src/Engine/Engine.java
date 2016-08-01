@@ -2,6 +2,7 @@ package Engine;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,7 +33,9 @@ public class Engine {
   public static ArrayList<Sprite> sprites;
   public static Grid grid;
   public static boolean drawGrid=true;
-public static boolean initEngine(GLAutoDrawable drawable) {
+  public static boolean ctrlDown=false;
+  public static float scale=1.f;
+  public static boolean initEngine(GLAutoDrawable drawable) {
 	GL2 gl = drawable.getGL().getGL2();
  
  
@@ -74,14 +77,19 @@ public static void Render(GLAutoDrawable drawable){
 	 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); 
  
     for (Sprite sprite : sprites) {
-		sprite.Draw(gl, camera);
+		sprite.Draw(gl, camera,scale);
 	}
     if(drawGrid){
    grid.Draw(gl);
     }
  
 }
-
+public static void KeyPress(KeyEvent e){
+	if(e.isControlDown()){
+	    Engine.ctrlDown=true;
+	   // System.out.println("Ctrl down");
+	}
+}
 public static void KeyRelease(KeyEvent e){
  
 	if(e.getKeyChar()=='w'){
@@ -97,14 +105,18 @@ public static void KeyRelease(KeyEvent e){
 	if(e.getKeyChar()=='d'){
 	     camera.move(camera.getX()+32, camera.getY());
 		}
+	if(!e.isControlDown()){
+	    Engine.ctrlDown=false;
+	   // System.out.println("Ctrl up");
+	}
 }
 
 public static void MousePress(MouseEvent e){
 	System.out.println("Button" +e.getButton()+ "    mouseX: "+ ( e.getX()+camera.getX()) + "   MouseY: " + (e.getY()+camera.getY()));
 	
 	if(e.getButton()==1){
-	float mouseX = e.getX()+camera.getX();
-    float mouseY = e.getY()+camera.getY();
+	float mouseX = (e.getX()/scale)+camera.getX();
+    float mouseY = (e.getY()/scale)+camera.getY();
 	float posx=32.0f*(float)Math.floor(mouseX/32);
 	float posy=32.0f*(float)Math.floor(mouseY/32);
 	Sprite s = new Sprite(sp);
@@ -113,8 +125,8 @@ public static void MousePress(MouseEvent e){
 	sprites.add(s);
 	}
 	if(e.getButton()==3){
-		float mouseX = e.getX()+camera.getX();
-	    float mouseY = e.getY()+camera.getY();
+		float mouseX = (e.getX()/scale)+camera.getX();
+	    float mouseY = (e.getY()/scale)+camera.getY();
 		float posx=32.0f*(float)Math.floor(mouseX/32);
 		float posy=32.0f*(float)Math.floor(mouseY/32);
 	    for (int i=0;i<sprites.size();i++) {
@@ -127,6 +139,24 @@ public static void MousePress(MouseEvent e){
 		
 		
 	}
+}
+public static void mouseWheelMove(MouseWheelEvent e){
+	if(ctrlDown){
+		System.out.println(e.getWheelRotation());
+		
+		if(e.getWheelRotation()==1){ //zoomout
+			if(scale>.25){
+				scale-=.25f;
+			}
+		}
+	if(e.getWheelRotation()==-1){ //zoomin
+		if(scale<4){
+			scale+=.25f;
+		}
+			
+		}
+	}
+	
 }
 
 }

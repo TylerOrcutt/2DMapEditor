@@ -12,6 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -111,8 +113,7 @@ public class Window extends JFrame{
   GLProfile profle= GLProfile.get(GLProfile.GL2);
    GLCapabilities cap = new GLCapabilities(profle);
    final GLCanvas canvas = new GLCanvas(cap);
- final float x=100, y=100;
-  //  JSplitPane 
+  
 
      canvas.addGLEventListener(new GLEventListener(){
 	@Override
@@ -121,24 +122,10 @@ public class Window extends JFrame{
  
          
 		gl.glClear( GL.GL_COLOR_BUFFER_BIT );
-	//    gl.glLoadIdentity();
+ 
 		Engine.Render(drawable);
 
-       // draw a triangle filling the window
  
-   
-     //   gl.glBegin( GL.GL_TRIANGLE_STRIP );
-       
-       /* gl.glColor3f( 1, 0, 0 );
-        gl.glVertex2f( x, y );
-        gl.glColor3f( 0, 1, 0 );
-        gl.glVertex2f(x, y+100 );
-        gl.glColor3f( 0, 0, 1 );
-        gl.glVertex2f( x+100, y );
-        gl.glColor3f( 1, 1, 1 );
-        gl.glVertex2f( x+100, y+100 );
-        gl.glEnd();
-    */
    	}
 
 	@Override
@@ -176,7 +163,7 @@ public class Window extends JFrame{
      ani.start();
    // splitpane.setOneTouchExpandable(true);
     splitpane.setDividerLocation(0);
-    splitpane.setResizeWeight(.5);
+ 
     canvas.addKeyListener(new KeyListener() {
 		
 		@Override
@@ -194,7 +181,7 @@ public class Window extends JFrame{
 		
 		@Override
 		public void keyPressed(KeyEvent e) {
-	 
+	         Engine.KeyPress(e);
 		}
 	});
     
@@ -232,7 +219,15 @@ public class Window extends JFrame{
 			
 		}
 	});
-   
+   canvas.addMouseWheelListener(new MouseWheelListener() {
+	
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		Engine.mouseWheelMove(e);
+		// TODO Auto-generated method stub
+		
+	}
+});
  
 
   this.addWindowListener(new WindowListener(){

@@ -9,6 +9,7 @@ public class Sprite  {
 	public float x,y;
 	public float width=32,height=32;
 	public int imgx,imgy;
+ 
    public Sprite(SpriteSheet sp){
 		this.spriteSheet=sp;
 		x=0;
@@ -32,18 +33,22 @@ public class Sprite  {
 	   imgx=x;
 	   imgy=y;
    }
-   public void Draw(GL2 gl, Camera camera){
+   public void Draw(GL2 gl, Camera camera,float scale){
 	   if(spriteSheet!=null){
-	   spriteSheet.draw(gl, x-camera.getX(), y-camera.getY(), width, height, imgx, imgy);
+	   spriteSheet.draw(gl, (x-camera.getX())*scale, (y-camera.getY())*scale, width*scale, height*scale, imgx, imgy);
 	   }else{
 		  
 		   SpriteRenderer.Draw(gl, x-camera.getX(), y-camera.getY(), width, height, imgx, imgy,0,0);
 	   }
    }
    
-   public void Draw(GL2 gl){
-	   
-	   SpriteRenderer.Draw(gl, x, y, width, height, imgx, imgy,0,0);
+   public void Draw(GL2 gl,float scale){
+	   if(spriteSheet!=null){
+		   spriteSheet.draw(gl, x , y , width, height, imgx, imgy);
+		   }else{
+			  
+			   SpriteRenderer.Draw(gl, x *scale, y*scale , width*scale, height*scale, imgx, imgy,0,0);
+		   }
    }
    public void Update(){
 	   
