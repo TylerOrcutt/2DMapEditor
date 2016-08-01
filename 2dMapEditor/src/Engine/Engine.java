@@ -27,45 +27,33 @@ public class Engine {
 
   public static SpriteSheet sp;
   public static Sprite sprite;
+ 
   public static Camera camera;
   public static ArrayList<Sprite> sprites;
+  public static Grid grid;
+  public static boolean drawGrid=true;
 public static boolean initEngine(GLAutoDrawable drawable) {
 	GL2 gl = drawable.getGL().getGL2();
-
-	//  gl.glShadeModel(GL2.GL_FLAT);
-	
-	 // gl.glBindFramebuffer(gl.GL_FRAMEBUFFER, 0);
-	 // gl.glDrawBuffer(gl.GL_BACK);
+ 
+ 
      shaders = new ShaderProgram(gl,"vertexshader.glsl","fragmentshader.glsl");
      SpriteRenderer.init(gl, shaders);
-  //  gl.glEnable(gl.GL_BLEND);
-   // gl.glEnable(gl.GL_TEXTURE_2D);
-     gl.glEnable(GL2.GL_DEPTH_TEST); // enables depth testing
-     gl.glDepthFunc(GL2.GL_LEQUAL);  // the type of depth test to do
-     gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST); // best perspective correction
+ 
+     gl.glEnable(GL2.GL_DEPTH_TEST); 
+     gl.glDepthFunc(GL2.GL_LEQUAL);   
+     gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);  
      gl.glShadeModel(GL2.GL_SMOOTH); 
      gl.glClearDepth(1.0f);  
-	//gl.glOrtho(0,  width, height, 0, 0,1);
+ 
 
     sp= new SpriteSheet(gl,"images/sp2.png", 10, 10); 
-    //sprite = new Sprite(sp);
-    //sprite.setImgLoc(0, 1);
-    sprites  = new ArrayList<Sprite>();
+ 
+  sprites  = new ArrayList<Sprite>();
+  grid= new Grid();   
     camera = new Camera();
 	return true;
 }
-private static void getAllFiles(File curDir) {
-
-    File[] filesList = curDir.listFiles();
-    for(File f : filesList){
-        //if(f.isDirectory())
-          //  getAllFiles(f);
-        if(f.isFile()){
-            System.out.println(f.getName());
-        }
-    }
-
-}
+ 
 public static void resize(GLAutoDrawable drawable,int x,int y, int width,int height){
 	GL2 gl = drawable.getGL().getGL2();
 
@@ -76,6 +64,8 @@ public static void resize(GLAutoDrawable drawable,int x,int y, int width,int hei
     camera.resize(width, height);
 
     SpriteRenderer.Resize(gl, width, height);
+    
+    grid.resize(width, height);
 
 }
 public static void Render(GLAutoDrawable drawable){
@@ -86,6 +76,9 @@ public static void Render(GLAutoDrawable drawable){
     for (Sprite sprite : sprites) {
 		sprite.Draw(gl, camera);
 	}
+    if(drawGrid){
+   grid.Draw(gl);
+    }
  
 }
 

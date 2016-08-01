@@ -38,7 +38,8 @@ public static int tScalex;
 public static int tScaley;
 public static int mTextLoc;
 public static int mSamplerLoc;
-
+public static int useTexture;
+public static boolean utexture=true;
 
 
 
@@ -61,6 +62,7 @@ public static void init(GL2 gl,ShaderProgram shaderProgram){
 	tScalex=	gl.glGetUniformLocation(shaderProgram.id(), "tScaleX");
 	tScaley=	gl.glGetUniformLocation(shaderProgram.id(), "tScaleY");
 	mSamplerLoc=	gl.glGetUniformLocation(shaderProgram.id(), "s_texture");
+			useTexture=	gl.glGetUniformLocation(shaderProgram.id(), "useTexture");
 	vPosition= gl.glGetAttribLocation(shaderProgram.id(), "vPosition");
     mTextLoc= gl.glGetAttribLocation(shaderProgram.id(), "a_texCoord");
 cubeData= genVertexBuffer(1, 1);
@@ -77,6 +79,7 @@ gl.glEnableVertexAttribArray(vPosition);
 	 		 	gl.glDisableVertexAttribArray(mTextLoc);
 
 	 			gl.glUniform1i(mSamplerLoc, 0);
+           setUseTexture(true);
 }
 public static void Resize(GL2 gl, float width,float height){
 	gl.glUseProgram(shaderProgram.id());
@@ -96,9 +99,7 @@ gl.glMatrixMode(GL2.GL_MODELVIEW);
 gl.glLoadIdentity();
 
 
-	
  
-
 }
 
 public static void Draw(GL2 gl,float x,float y,float width,float height,float imgx,float imgy,float imgwidth,float imgheight){
@@ -142,6 +143,18 @@ public static FloatBuffer genVertexBuffer(float renderWidth,float renderHeight){
 
     return buf;
 
+}
+public static void toggleUseTexture(){
+   setUseTexture(!utexture);
+	
+}
+public static void setUseTexture(boolean use){
+	utexture=use;
+	if(utexture){
+	gl.glUniform1i(useTexture, 1);
+	}else{
+		gl.glUniform1i(useTexture, 0);
+	}
 }
 public static FloatBuffer genTextureBuffer(float spriteWidth, float spriteHeight){
     float textcords[]={

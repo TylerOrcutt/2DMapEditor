@@ -33,11 +33,24 @@ public class Sprite  {
 	   imgy=y;
    }
    public void Draw(GL2 gl, Camera camera){
+	   if(spriteSheet!=null){
 	   spriteSheet.draw(gl, x-camera.getX(), y-camera.getY(), width, height, imgx, imgy);
+	   }else{
+		  
+		   SpriteRenderer.Draw(gl, x-camera.getX(), y-camera.getY(), width, height, imgx, imgy,0,0);
+	   }
+   }
+   
+   public void Draw(GL2 gl){
 	   
+	   SpriteRenderer.Draw(gl, x, y, width, height, imgx, imgy,0,0);
    }
    public void Update(){
 	   
+   }
+   public void resize(float width,float height){
+	   this.width=width;
+	   this.height=height;
    }
 	
 	

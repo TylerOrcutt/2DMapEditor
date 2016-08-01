@@ -19,4 +19,5 @@ varying vec2 v_texCoord;
     txtpos.x=txtpos.x*tScaleX+tposx ; 
     txtpos.y=txtpos.y*tScaleY+tposy ;
     v_texCoord = txtpos;
+    gl_FrontColor = gl_Color; 
     }

@@ -63,7 +63,9 @@ public class SpriteSheet {
 	    public void draw(GL2 gl,float x,float y,float width,float height,float imgx,float imgy ){
                 //txt.bind(gl);
               //  txt.getTextureObject()
+	    	if(texture!=null){
                 texture.bind(gl);
+	    	}
 	       float sx=(1.0f/getTextureWidth())*getSpriteWidth()*imgx;
 	        float sy=(1.0f/getTextureHeight())*getSpriteHeight()*imgy;
 	     //   SpriteRenderer.Draw(x,y,w,h,sx,sy,getActualSpriteWidth(),getActualSpriteHeight());

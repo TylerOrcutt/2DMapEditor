@@ -171,11 +171,11 @@ public class Window extends JFrame{
 
      JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftp,canvas);
      this.add(splitpane,BorderLayout.CENTER);
-   
+
      ani.add(canvas);
      ani.start();
    // splitpane.setOneTouchExpandable(true);
-    splitpane.setDividerLocation(250);
+    splitpane.setDividerLocation(0);
     splitpane.setResizeWeight(.5);
     canvas.addKeyListener(new KeyListener() {
 		
