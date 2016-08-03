@@ -6,6 +6,8 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.MenuItem;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
@@ -26,12 +28,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
+
 
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
@@ -83,7 +87,24 @@ public class Window extends JFrame{
       fileMenu.add(new JMenuItem("Exit"));
       
       fileMenu = new JMenu("View");
-      fileMenu.add(new JCheckBoxMenuItem("Show Grid",true));
+      JCheckBoxMenuItem gridcheck =new JCheckBoxMenuItem("Show Grid",true);
+      fileMenu.add(gridcheck);
+      
+      
+      JMenu statusm = new JMenu();
+      statusm.add(new JMenuItem("Exit"));
+      this.add(statusm,BorderLayout.SOUTH);
+ 
+    
+      
+      gridcheck.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Engine.drawGrid=!Engine.drawGrid;
+		}
+	});
       menubar.add(fileMenu);
  
       

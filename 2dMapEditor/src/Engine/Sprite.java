@@ -44,11 +44,15 @@ public class Sprite  {
    
    public void Draw(GL2 gl,float scale){
 	   if(spriteSheet!=null){
-		   spriteSheet.draw(gl, x , y , width, height, imgx, imgy);
+		   spriteSheet.draw(gl, x*scale , y*scale , width*scale, height*scale, imgx, imgy);
 		   }else{
 			  
 			   SpriteRenderer.Draw(gl, x *scale, y*scale , width*scale, height*scale, imgx, imgy,0,0);
 		   }
+   }
+   public void Draw(GL2 gl){
+	   SpriteRenderer.Draw(gl, x , y , width, height, imgx, imgy,0,0);
+		 
    }
    public void Update(){
 	   

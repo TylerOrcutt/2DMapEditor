@@ -1,5 +1,6 @@
+ 
 package Camera;
-
+import Engine.Engine;
 public class Camera {
 	float x=0,y=0,z=0;
 	float width=800,height=600;
@@ -30,5 +31,11 @@ public class Camera {
 	public void resize(float width,float height){
 		this.width=width;
 		this.height=height;
+		
+	}
+	public void orient(float centerX,float centerY){
+ 
+ 
+	 
 	}
 }

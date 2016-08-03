@@ -35,6 +35,9 @@ public class Engine {
   public static boolean drawGrid=true;
   public static boolean ctrlDown=false;
   public static float scale=1.f;
+  public static float centerX=0.f;
+  public static float centerY=0.f;
+  
   public static boolean initEngine(GLAutoDrawable drawable) {
 	GL2 gl = drawable.getGL().getGL2();
  
@@ -65,6 +68,7 @@ public static void resize(GLAutoDrawable drawable,int x,int y, int width,int hei
    Engine.width=width;
     Engine.height=height;
     camera.resize(width, height);
+    camera.orient(centerX, centerY);
 
     SpriteRenderer.Resize(gl, width, height);
     
@@ -94,17 +98,22 @@ public static void KeyRelease(KeyEvent e){
  
 	if(e.getKeyChar()=='w'){
      camera.move(camera.getX(), camera.getY()-32);
+    centerY-=32;
+   
 	}
 	
 	if(e.getKeyChar()=='s'){
 	     camera.move(camera.getX(), camera.getY()+32);
+	     centerY+=32;
 		}
 	if(e.getKeyChar()=='a'){
 	     camera.move(camera.getX()-32, camera.getY());
+	     centerX-=32;
 		}
 	if(e.getKeyChar()=='d'){
 	     camera.move(camera.getX()+32, camera.getY());
-		}
+	     centerX+=32;	
+	}
 	if(!e.isControlDown()){
 	    Engine.ctrlDown=false;
 	   // System.out.println("Ctrl up");
@@ -142,16 +151,20 @@ public static void MousePress(MouseEvent e){
 }
 public static void mouseWheelMove(MouseWheelEvent e){
 	if(ctrlDown){
-		System.out.println(e.getWheelRotation());
+		//System.out.println(e.getWheelRotation());
 		
 		if(e.getWheelRotation()==1){ //zoomout
 			if(scale>.25){
 				scale-=.25f;
+				grid.generateGrid();
+			    camera.orient(centerX, centerY);
 			}
 		}
 	if(e.getWheelRotation()==-1){ //zoomin
-		if(scale<4){
+		if(scale<10){
 			scale+=.25f;
+			grid.generateGrid();
+		    camera.orient(centerX, centerY);
 		}
 			
 		}
