@@ -27,7 +27,7 @@ public static int cubeVBOID[];
 public static FloatBuffer cubeData;
 public static FloatBuffer TextureData;
 
-public static int vPosition;
+public static int vPosition=-1;
 public static int vPosx;
 public static int vPosy;
 public static int vScalex;
@@ -40,19 +40,27 @@ public static int mTextLoc;
 public static int mSamplerLoc;
 public static int useTexture;
 public static boolean utexture=true;
-
+public static boolean isInit=false;
 
 
 static float viewMatrix[];
 public static void init(GL2 gl,ShaderProgram shaderProgram){
-		SpriteRenderer.gl=gl;
+	System.out.println("Initilizing sprite renderer");
+//	if(isInit){
+
+	//	return;
+	//}
+	SpriteRenderer.gl=gl;
 		gl.glEnable(gl.GL_TEXTURE_2D);
 		   gl.glEnable(gl.GL_BLEND);
 		   gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE_MINUS_SRC_ALPHA);
-		SpriteRenderer.shaderProgram = shaderProgram;
+
+		   SpriteRenderer.shaderProgram = shaderProgram;
 		gl.glUseProgram(shaderProgram.id());
 	  gl.glEnableClientState(gl.GL_VERTEX_ARRAY);
 	 	  gl.glEnable(GL2.GL_DEPTH_TEST);
+	 	  
+	 	  
 	vPosx=gl.glGetUniformLocation(shaderProgram.id(), "vposx");
 	vPosy=	gl.glGetUniformLocation(shaderProgram.id(), "vposy");
 	 vScalex=gl.glGetUniformLocation(shaderProgram.id(), "vScaleX");
@@ -67,8 +75,7 @@ public static void init(GL2 gl,ShaderProgram shaderProgram){
     mTextLoc= gl.glGetAttribLocation(shaderProgram.id(), "a_texCoord");
 cubeData= genVertexBuffer(1, 1);
 
-
-System.out.println(mSamplerLoc);
+ 
 gl.glEnableVertexAttribArray(vPosition);
 	   gl.glVertexAttribPointer(vPosition, 3, gl.GL_FLOAT, false, 12, cubeData);
 	 	gl.glDisableVertexAttribArray(vPosition);
@@ -80,6 +87,8 @@ gl.glEnableVertexAttribArray(vPosition);
 
 	 			gl.glUniform1i(mSamplerLoc, 0);
            setUseTexture(true);
+       
+       	System.out.println("Initilizing sprite renderer compelete");
 }
 public static void Resize(GL2 gl, float width,float height){
 	gl.glUseProgram(shaderProgram.id());

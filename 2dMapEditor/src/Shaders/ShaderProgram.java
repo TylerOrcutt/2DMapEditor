@@ -15,7 +15,9 @@ public class ShaderProgram {
 
 	private GL2 gl;
 	private 	    com.jogamp.opengl.util.glsl.ShaderProgram program ;
-
+	public ShaderProgram(){
+		
+	}
 	public ShaderProgram(GL2 gl,String shaderFile,String fragmentFile){
 		this.gl = gl;
 
@@ -27,14 +29,37 @@ public class ShaderProgram {
 	    program.add(vertexShader);
 	    program.add(fragmentShader);
 	    program.link(gl, System.out);
-	   
- 
+	     System.out.println("Shader program ID: " + program.id());
+	 	int vPosx=gl.glGetUniformLocation(program.id(), "vposx");
+		int vPosy=	gl.glGetUniformLocation(program.id(), "vposy");
+		 int vScalex=gl.glGetUniformLocation(program.id(), "vScaleX");
+		 System.out.println("vPosX:" + vPosx);
 	  gl.glUseProgram(program.id());
 		
 
  	
 	}
+	public void init(GL2 gl,String shaderFile,String fragmentFile){
+		this.gl = gl;
 
+		
+	    ShaderCode vertexShader = ShaderCode.create(gl, gl.GL_VERTEX_SHADER, this.getClass(), ".", null, "shaders/vertexshader", "glsl", null, true);
+	    
+	    ShaderCode fragmentShader = ShaderCode.create(gl, gl.GL_FRAGMENT_SHADER, this.getClass(), ".", null, "shaders/fragmentshader", "glsl", null, true);
+	    program = new  com.jogamp.opengl.util.glsl.ShaderProgram();
+	    program.add(vertexShader);
+	    program.add(fragmentShader);
+	    program.link(gl, System.out);
+	     System.out.println("Shader program ID: " + program.id());
+	 	int vPosx=gl.glGetUniformLocation(program.id(), "vposx");
+		int vPosy=	gl.glGetUniformLocation(program.id(), "vposy");
+		 int vScalex=gl.glGetUniformLocation(program.id(), "vScaleX");
+		 System.out.println("vPosX:" + vPosx);
+	  gl.glUseProgram(program.id());
+		
+
+ 	
+	}
 	public int id(){
 		return program.id();
 	}

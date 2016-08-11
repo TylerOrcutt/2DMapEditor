@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -34,6 +37,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 
@@ -52,6 +56,8 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.Animator;
 
 import Engine.Engine;
+import Engine.SpriteRenderer;
+import Shaders.ShaderProgram;
 
 public class Window extends JFrame{
 	//private static final Engine engine;
@@ -127,84 +133,138 @@ public class Window extends JFrame{
     btn = new JButton("");
     btn.setIcon(new ImageIcon("images/bluespawn.png"));
     toolbar.add(btn);
-    toolbar.add(new JButton("Test"));
-    
     this.add(toolbar,BorderLayout.NORTH);
-
-  GLProfile profle= GLProfile.get(GLProfile.GL2);
-   GLCapabilities cap = new GLCapabilities(profle);
-   final GLCanvas canvas = new GLCanvas(cap);
-  
-
-     canvas.addGLEventListener(new GLEventListener(){
-	@Override
-	public void display(GLAutoDrawable drawable) {
-		GL3 gl= drawable.getGL().getGL3();
+    JTextField bsizeTxt = new JTextField(3);
+    toolbar.add(bsizeTxt);
  
-         
-		gl.glClear( GL.GL_COLOR_BUFFER_BIT );
- 
-		Engine.Render(drawable);
-
- 
-   	}
-
-	@Override
-	public void dispose(GLAutoDrawable arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void init(GLAutoDrawable drawable) {
-		Engine.initEngine(drawable);
-		
-	}
-
-	@Override
-	public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
-
- 
-	Engine.resize(drawable, x, y, w, h);
-	
-	}
-	   
-   });
-     Animator ani = new Animator();
-     ani.setUpdateFPSFrames(60, null);
-      
- 
-     JPanel leftp = new JPanel(new BorderLayout());
-    
-
-     JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftp,canvas);
-     this.add(splitpane,BorderLayout.CENTER);
-
-     ani.add(canvas);
-     ani.start();
-   // splitpane.setOneTouchExpandable(true);
-    splitpane.setDividerLocation(0);
- 
-    canvas.addKeyListener(new KeyListener() {
+    bsizeTxt.addKeyListener(new KeyListener() {
 		
 		@Override
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
-			
+			   try{
+				   Engine.brushSize = Float.parseFloat(bsizeTxt.getText());
+				   System.out.println("Brush size: " + Engine.brushSize);
+			   }catch (Exception ez) {
+				Engine.brushSize=32;
+			}
 		}
 		
 		@Override
 		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
-			
-			Engine.KeyRelease(e);
+			   try{
+				   Engine.brushSize = Float.parseFloat(bsizeTxt.getText());
+				   System.out.println("Brush size: " + Engine.brushSize);
+			   }catch (Exception ez) {
+				Engine.brushSize=32;
+			}
 		}
 		
 		@Override
 		public void keyPressed(KeyEvent e) {
-	         Engine.KeyPress(e);
+			// TODO Auto-generated method stub
+			   try{
+				   Engine.brushSize = Float.parseFloat(bsizeTxt.getText());
+				   System.out.println("Brush size: " + Engine.brushSize);
+			   }catch (Exception ez) {
+				Engine.brushSize=32;
+			}
+			 
 		}
 	});
+   
+    bsizeTxt.setMinimumSize(new Dimension( 50, 50));
+    toolbar.addSeparator();
+  
+    JButton testbtn = new JButton("Run");
+    toolbar.add(testbtn);	
+    final Window win = this;
+   	Engine.initEngine( );
+testbtn.addActionListener(new ActionListener() {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		try{
+		Runtime.getRuntime().exec("./RusticValley -dev");
+		}catch(Exception e1){
+			
+		}
+	}
+});
+    bsizeTxt.setMinimumSize(new Dimension(250, 50));
+
+  GLProfile profle= GLProfile.get(GLProfile.GL2);
+   GLCapabilities cap = new GLCapabilities(profle);
+   final GLCanvas canvas = new GLCanvas(cap);
+ 
+  final Animator ani = new Animator();
+   ani.setUpdateFPSFrames(60, null);
+    
+     canvas.addGLEventListener(new GLEventListener() {
+		
+		@Override
+		public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
+			// TODO Auto-generated method stub
+			Engine.initShaders(drawable);
+			Engine.resize(drawable, x, y, w, h);
+		}
+		
+		@Override
+		public void init(GLAutoDrawable drawable) {
+			// TODO Auto-generated method stub
+			Engine.initShaders(drawable);
+			Engine.initAssets(drawable);
+		}
+		
+		@Override
+		public void dispose(GLAutoDrawable arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void display(GLAutoDrawable drawable) {
+			// TODO Auto-generated method stub
+		Engine.Render(drawable);
+			
+		}
+	});
+     
+ 
+     JPanel leftp = new JPanel(new BorderLayout());
+    
+
+     JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftp,canvas);
+     this.getContentPane().add(splitpane,BorderLayout.CENTER);
+
+    ani.add(canvas);
+     ani.start();
+   splitpane.setOneTouchExpandable(true);
+   splitpane.setDividerLocation(50);
+
+ 
+canvas.addKeyListener(new KeyListener() {
+	
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		Engine.KeyRelease(e);
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		Engine.KeyPress(e);
+	}
+});
     
     canvas.addMouseListener(new MouseListener() {
 		
@@ -262,6 +322,7 @@ public class Window extends JFrame{
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
+		System.out.println("Window close");
 	 canvas.destroy();
 		
 	}
