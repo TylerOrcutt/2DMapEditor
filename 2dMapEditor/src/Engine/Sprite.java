@@ -33,12 +33,12 @@ public class Sprite  {
 	   imgx=x;
 	   imgy=y;
    }
-   public void Draw(GL2 gl, Camera camera,float scale){
+   public void Draw(GL2 gl, Camera camera,float scale,float offset){
 	   if(spriteSheet!=null){
-	   spriteSheet.draw(gl, (x-camera.getX())*scale, (y-camera.getY())*scale, width*scale, height*scale, imgx, imgy);
+	   spriteSheet.draw(gl, (offset+x+-camera.getX())*scale, (y-camera.getY())*scale, width*scale, height*scale, imgx, imgy);
 	   }else{
 		  
-		   SpriteRenderer.Draw(gl, x-camera.getX(), y-camera.getY(), width, height, imgx, imgy,0,0);
+		   SpriteRenderer.Draw(gl, offset+x-camera.getX(), y-camera.getY(), width, height, imgx, imgy,0,0);
 	   }
    }
    

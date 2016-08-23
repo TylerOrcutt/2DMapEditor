@@ -16,8 +16,8 @@ varying vec2 v_texCoord;
 
      gl_Position =  gl_ModelViewProjectionMatrix*position ;
     vec2 txtpos = a_texCoord;
-    txtpos.x=txtpos.x*tScaleX+tposx ; 
-    txtpos.y=txtpos.y*tScaleY+tposy ;
+    txtpos.x=(txtpos.x*tScaleX)+tposx ; 
+    txtpos.y=(txtpos.y*tScaleY)+tposy ;
     v_texCoord = txtpos;
     gl_FrontColor = gl_Color; 
     }

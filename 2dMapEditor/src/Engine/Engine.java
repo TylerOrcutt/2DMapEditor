@@ -19,6 +19,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.glsl.ShaderCode;
 
 import Camera.Camera;
+import Editor.SpriteFrame;
 import Shaders.ShaderProgram;
 
 
@@ -38,20 +39,17 @@ public class Engine {
   public static float scale=1.f;
   public static float centerX=0.f;
   public static float centerY=0.f;
-  public static float brushSize=16.f;
+  public static float brushSize=32.f;
   public static boolean running =true;
   public static boolean didInit=false;
+  public static SpriteFrame spriteFrame;
   public static boolean initEngine() {
 
-
- 
-
- 
   sprites  = new ArrayList<Sprite>();
   grid= new Grid();   
 		
   camera = new Camera();
-    
+  
 	 
 	 
 	return true;
@@ -59,7 +57,8 @@ public class Engine {
   public static void initAssets(GLAutoDrawable drawable){
 	  GL2 gl = drawable.getGL().getGL2();
 
-	    sp= new SpriteSheet(gl,"images/sp2.png", 10, 10); 
+	    sp= new SpriteSheet(gl,"images/sp2.png", 20, 15); 
+	    spriteFrame = new SpriteFrame(sp);  
   }
   public static void initShaders(GLAutoDrawable drawable){
 	  GL2 gl = drawable.getGL().getGL2();
@@ -71,7 +70,8 @@ public class Engine {
 			     gl.glDepthFunc(GL2.GL_LEQUAL);   
 			     gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);  
 			     gl.glShadeModel(GL2.GL_SMOOTH); 
-			     gl.glClearDepth(1.0f);  
+			     gl.glClearDepth(1.0f); 
+			     gl.glClearColor(0, 0, 0, 1);
 	 }
   }
  
@@ -104,10 +104,13 @@ public static void Render(GLAutoDrawable drawable){
  
 	//System.out.println("Draw");
 	 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); 
- 
+  spriteFrame.Draw(gl);
     for (Sprite sprite : sprites) {
-		sprite.Draw(gl, camera,scale);
-	}
+    	if( sprite.x-camera.getX() >=0){
+		sprite.Draw(gl, camera,scale,spriteFrame.width);
+    	}
+    	}
+    	
     if(drawGrid){
     
    grid.Draw(gl);
@@ -148,10 +151,13 @@ public static void KeyRelease(KeyEvent e){
 }
 
 public static void MousePress(MouseEvent e){
-	System.out.println("Button" +e.getButton()+ "    mouseX: "+ ( e.getX()+camera.getX()) + "   MouseY: " + (e.getY()+camera.getY()));
+	System.out.println("Button" +e.getButton()+ "    mouseX: "+ ( e.getX()-spriteFrame.width+camera.getX()) + "   MouseY: " + (e.getY()+camera.getY()));
 	
 	if(e.getButton()==1){
-	float mouseX = (e.getX()/scale)+camera.getX();
+		if(e.getX()<=spriteFrame.width){
+			return;
+		}
+		float mouseX = (e.getX()-spriteFrame.width/scale)+camera.getX();
     float mouseY = (e.getY()/scale)+camera.getY();
     float posx=32.f;
 		float posy=0.f;
@@ -167,7 +173,7 @@ public static void MousePress(MouseEvent e){
 
 	    }
 	Sprite s = new Sprite(sp);
-	s.setImgLoc(0, 1);
+	s.setImgLoc(0, 0);
 	s.move(posx, posy);
 	s.resize(brushSize, brushSize);
 	sprites.add(s);
@@ -188,6 +194,7 @@ public static void MousePress(MouseEvent e){
 		  posy=32.0f*(float)Math.floor(mouseY/32);
 
 	    }
+	     
 		for (int i=0;i<sprites.size();i++) {
 	    	
 			if(sprites.get(i).getX()==posx && sprites.get(i).getY()==posy){

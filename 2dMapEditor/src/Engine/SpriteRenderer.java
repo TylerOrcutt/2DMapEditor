@@ -70,11 +70,12 @@ public static void init(GL2 gl,ShaderProgram shaderProgram){
 	tScalex=	gl.glGetUniformLocation(shaderProgram.id(), "tScaleX");
 	tScaley=	gl.glGetUniformLocation(shaderProgram.id(), "tScaleY");
 	mSamplerLoc=	gl.glGetUniformLocation(shaderProgram.id(), "s_texture");
-			useTexture=	gl.glGetUniformLocation(shaderProgram.id(), "useTexture");
+	 useTexture=	gl.glGetUniformLocation(shaderProgram.id(), "useTexture");
 	vPosition= gl.glGetAttribLocation(shaderProgram.id(), "vPosition");
     mTextLoc= gl.glGetAttribLocation(shaderProgram.id(), "a_texCoord");
 cubeData= genVertexBuffer(1, 1);
 
+System.out.println("tScaleX: " + tScalex + "\ntScaleY: " + tScaley);
  
 gl.glEnableVertexAttribArray(vPosition);
 	   gl.glVertexAttribPointer(vPosition, 3, gl.GL_FLOAT, false, 12, cubeData);

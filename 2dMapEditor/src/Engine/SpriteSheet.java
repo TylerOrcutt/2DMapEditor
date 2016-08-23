@@ -39,7 +39,7 @@ public class SpriteSheet {
 	   
 	             width=image.getWidth();
 	             height=image.getHeight();
-	             
+	             System.out.println("Image width "+ width );
 	    
 	             
 	             Texture texture = AWTTextureIO.newTexture(gl.getGLProfile(), image, false);

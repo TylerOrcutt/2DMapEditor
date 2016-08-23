@@ -21,17 +21,24 @@ public void Draw(GL2 gl){
 	SpriteRenderer.setUseTexture(true);
 }
 public void generateGrid(){
+	generateGrid(Engine.width, Engine.height, Engine.scale);
+}
+public void generateGrid(float width,float height,float scale){
 	lines.clear();
-	for(int i=0;i<=Engine.width;i+=32*Engine.scale){
+	float offset=0;
+	if(Engine.spriteFrame.visiable){
+		offset=Engine.spriteFrame.width;
+	}
+	for(float i=offset;i<=width;i+=32*scale){
 		Sprite sprite= new Sprite(null);
-		sprite.resize(5, Engine.height);
+		sprite.resize(5, height);
 		sprite.move(i-2.5f, 0);
 		lines.add(sprite);
 	}
-	for(int i=0;i<=Engine.height;i+=32*Engine.scale){
+	for(int i=0;i<=height;i+=32*scale){
 		Sprite sprite= new Sprite(null);
-		sprite.resize(Engine.width, 5);
-		sprite.move(0, i-2.5f);
+		sprite.resize(width-offset, 5);
+		sprite.move(offset, i-2.5f);
 		lines.add(sprite);
 	}
 }

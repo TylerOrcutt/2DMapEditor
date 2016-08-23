@@ -58,13 +58,17 @@ import com.jogamp.opengl.util.Animator;
 import Engine.Engine;
 import Engine.SpriteRenderer;
 import Shaders.ShaderProgram;
+import io.FileWriter;
 
 public class Window extends JFrame{
 	//private static final Engine engine;
 	
 	  private  boolean closeRequested = false;
 	  private final AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
+ 
 	public Window(String title){
+ 
+		
  
 		this.setSize(800,600);
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -136,7 +140,7 @@ public class Window extends JFrame{
     this.add(toolbar,BorderLayout.NORTH);
     JTextField bsizeTxt = new JTextField(3);
     toolbar.add(bsizeTxt);
- 
+     bsizeTxt.setText("32");
     bsizeTxt.addKeyListener(new KeyListener() {
 		
 		@Override
@@ -187,7 +191,9 @@ testbtn.addActionListener(new ActionListener() {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		try{
-		Runtime.getRuntime().exec("./RusticValley -dev");
+			FileWriter.writeFile("test.map");
+			
+		Runtime.getRuntime().exec("./PETest -dev -m "+ "./test.map");
 		}catch(Exception e1){
 			
 		}
@@ -236,13 +242,13 @@ testbtn.addActionListener(new ActionListener() {
      JPanel leftp = new JPanel(new BorderLayout());
     
 
-     JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftp,canvas);
-     this.getContentPane().add(splitpane,BorderLayout.CENTER);
-
+     //JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftp,canvas);
+    // this.getContentPane().add(splitpane,BorderLayout.CENTER);
+      this.getContentPane().add(canvas,BorderLayout.CENTER);
     ani.add(canvas);
      ani.start();
-   splitpane.setOneTouchExpandable(true);
-   splitpane.setDividerLocation(50);
+   //splitpane.setOneTouchExpandable(true);
+   //splitpane.setDividerLocation(50);
 
  
 canvas.addKeyListener(new KeyListener() {
