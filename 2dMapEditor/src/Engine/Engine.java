@@ -155,9 +155,10 @@ public static void MousePress(MouseEvent e){
 	
 	if(e.getButton()==1){
 		if(e.getX()<=spriteFrame.width){
+			spriteFrame.sp.onClick(e);
 			return;
 		}
-		float mouseX = (e.getX()-spriteFrame.width/scale)+camera.getX();
+    float mouseX = (e.getX()-spriteFrame.width/scale)+camera.getX();
     float mouseY = (e.getY()/scale)+camera.getY();
     float posx=32.f;
 		float posy=0.f;
@@ -173,7 +174,7 @@ public static void MousePress(MouseEvent e){
 
 	    }
 	Sprite s = new Sprite(sp);
-	s.setImgLoc(0, 0);
+	s.setImgLoc((int)spriteFrame.sp.selectionX/32,(int)spriteFrame.sp.selectionY/32);
 	s.move(posx, posy);
 	s.resize(brushSize, brushSize);
 	sprites.add(s);
