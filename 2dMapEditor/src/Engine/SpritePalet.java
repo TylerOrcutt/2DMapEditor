@@ -60,9 +60,9 @@ public class SpritePalet {
 		  selectionX=32.0f*(float)Math.floor(mouseX/32);
 		  selectionY=32.0f*(float)Math.floor(mouseY/32);
 		  selection s = new selection(selectionX, selectionY);
-		//  if(selected.isEmpty()){
+		   if(selected.isEmpty()){
 		  selected.add(s);
-		  /*}else{
+		   }else{
 			//sort
 			  boolean added=false;
 			  for(int i=0;i<selected.size();i++){
@@ -71,23 +71,18 @@ public class SpritePalet {
 	
 				  //ignore duplicats
 				  if(s.selectionX==sel.selectionX && s.selectionY==sel.selectionY){
+					  selected.remove(i);
 					  added=true;
 					  break;
 				  }
-				  if(sel.selectionY<s.selectionY){
-					  continue;
-				  }
-			 
-				  selected.add(i,s);
-				  added=true;
-				  break;
+		 
 				
 				  
 			  }
 			  if(!added){
 				  selected.add(s);
-			  }*/
-		//  }
+			  }
+		 }
 		  
  }
 	public void printList(){
