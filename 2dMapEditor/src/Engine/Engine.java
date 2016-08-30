@@ -43,6 +43,7 @@ public class Engine {
   public static boolean running =true;
   public static boolean didInit=false;
   public static SpriteFrame spriteFrame;
+  public static boolean shiftDown=false;
   public static boolean initEngine() {
 
   sprites  = new ArrayList<Sprite>();
@@ -122,6 +123,10 @@ public static void KeyPress(KeyEvent e){
 	    Engine.ctrlDown=true;
 	   // System.out.println("Ctrl down");
 	}
+	if(e.isShiftDown()){
+	    Engine.shiftDown=true;
+	   // System.out.println("Ctrl down");
+	}
 }
 public static void KeyRelease(KeyEvent e){
  
@@ -147,6 +152,9 @@ public static void KeyRelease(KeyEvent e){
 	    Engine.ctrlDown=false;
 	   // System.out.println("Ctrl up");
 	}
+	if(!e.isShiftDown()){
+		shiftDown=false;
+	}
 	System.out.println("key release");
 }
 
@@ -155,7 +163,7 @@ public static void MousePress(MouseEvent e){
 	
 	if(e.getButton()==1){
 		if(e.getX()<=spriteFrame.width){
-			spriteFrame.sp.onClick(e);
+			spriteFrame.sp.onClick(e,shiftDown);
 			return;
 		}
     float mouseX = (e.getX()-spriteFrame.width/scale)+camera.getX();
@@ -173,14 +181,30 @@ public static void MousePress(MouseEvent e){
 		  posy=32.0f*(float)Math.floor(mouseY/32);
 
 	    }
-	Sprite s = new Sprite(sp);
-	s.setImgLoc((int)spriteFrame.sp.selectionX/32,(int)spriteFrame.sp.selectionY/32);
-	s.move(posx, posy);
-	s.resize(brushSize, brushSize);
-	sprites.add(s);
+
+	ArrayList<selection> selected = spriteFrame.sp.getSelected();
+     float baseX = selected.get(0).selectionX;
+	float baseY=selected.get(0).selectionY;
+	for(int i=0;i<selected.size();i++){
+		 selection sel = selected.get(i);
+
+		Sprite s = new Sprite(sp);
+	
+			float tposx=posx+(sel.selectionX-baseX)*(brushSize/32);
+			
+			float tposy=posy+(sel.selectionY-baseY)*(brushSize/32);
+		s.move(tposx, tposy);
+		
+		 s.setImgLoc((int)sel.selectionX/32,(int)sel.selectionY/32);
+		s.resize(brushSize, brushSize);
+		sprites.add(s);
+	}
+//	s.setImgLoc((int)spriteFrame.sp.selectionX/32,(int)spriteFrame.sp.selectionY/32);
+//	spriteFrame.sp.printList();
+ 
 	}
 	if(e.getButton()==3){
-		float mouseX = (e.getX()/scale)+camera.getX();
+	    float mouseX = (e.getX()-spriteFrame.width/scale)+camera.getX();
 	    float mouseY = (e.getY()/scale)+camera.getY();
 	    float posx=32.f;
 		float posy=0.f;

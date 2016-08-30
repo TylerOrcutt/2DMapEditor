@@ -6,7 +6,7 @@ import Engine.SpritePalet;
 import Engine.SpriteSheet;
 
 public class SpriteFrame {
-	public float  width=200;
+	public float  width=600;
 	public SpritePalet sp;
 	 public boolean visiable=true;
 	public SpriteFrame(SpriteSheet sp){
@@ -15,6 +15,7 @@ public class SpriteFrame {
 	}
 	public void Draw(GL2 gl){
 		sp.Draw(gl);
+		
 	}
 
 	 
