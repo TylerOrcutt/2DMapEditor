@@ -29,7 +29,7 @@ public void generateGrid(float width,float height,float scale){
 	if(Engine.spriteFrame.visiable){
 		offset=Engine.spriteFrame.width;
 	}
-	for(float i=offset;i<=width;i+=32*scale){
+	for(float i=offset+32*scale;i<=width;i+=32*scale){
 		Sprite sprite= new Sprite(null);
 		sprite.resize(5, height);
 		sprite.move(i-2.5f, 0);

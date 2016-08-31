@@ -3,6 +3,7 @@ package Editor;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Canvas;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -17,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
@@ -297,6 +299,7 @@ canvas.addKeyListener(new KeyListener() {
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			// TODO Auto-generated method stub
+			canvas.requestFocus();
 			
 		}
 		
@@ -315,7 +318,26 @@ canvas.addKeyListener(new KeyListener() {
 		
 	}
 });
- 
+ canvas.addMouseMotionListener(new MouseMotionListener() {
+	
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(Engine.mouseMoved(e)){
+		   	canvas.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+		}else{
+		  	canvas.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+		
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		Engine.mouseDragged(e);
+		
+	}
+});
 
   this.addWindowListener(new WindowListener(){
 

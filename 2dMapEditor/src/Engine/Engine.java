@@ -162,6 +162,11 @@ public static void MousePress(MouseEvent e){
 	System.out.println("Button" +e.getButton()+ "    mouseX: "+ ( e.getX()-spriteFrame.width+camera.getX()) + "   MouseY: " + (e.getY()+camera.getY()));
 	
 	if(e.getButton()==1){
+		if(e.getX()>=spriteFrame.width-5  && e.getX()<=spriteFrame.width+5 ){
+			spriteFrame.sliderDragged=true;
+			return;
+		}
+		
 		if(e.getX()<=spriteFrame.width){
 			spriteFrame.sp.onClick(e,shiftDown);
 			return;
@@ -231,6 +236,9 @@ public static void MousePress(MouseEvent e){
 		
 	}
 }
+public static void MouseRelease(MouseEvent e){
+	spriteFrame.sliderDragged=false;
+}
 public static void mouseWheelMove(MouseWheelEvent e){
 	if(ctrlDown){
 		//System.out.println(e.getWheelRotation());
@@ -253,5 +261,13 @@ public static void mouseWheelMove(MouseWheelEvent e){
 	}
 	
 }
-
+public static void mouseDragged(MouseEvent e) {
+	spriteFrame.sliderDrag((float)e.getX(),(float)e.getY());
+}
+public static boolean mouseMoved(MouseEvent e) {
+	if(e.getX()>=spriteFrame.width-5  && e.getX()<=spriteFrame.width+5 ){
+	 return true;
+	}
+	return false;
+}
 }
