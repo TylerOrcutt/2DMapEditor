@@ -279,7 +279,7 @@ canvas.addKeyListener(new KeyListener() {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+			Engine.MouseRelease(e);
 			
 		}
 		
