@@ -110,7 +110,9 @@ public class Window extends JFrame{
 			Engine.sprites.clear();
 			Engine.useSizedMap=true;
 			JTextField mwidth = new JTextField();
+			mwidth.setText("4096");
 			JTextField mheight = new JTextField();
+			mheight.setText("4096");
 			final JComponent[] inputs = new JComponent[]{
 				new JLabel("Map Width"), mwidth,
 				new JLabel("Map Height"),mheight

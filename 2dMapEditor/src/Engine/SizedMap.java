@@ -42,11 +42,11 @@ public class SizedMap extends Map{
 			y/=32;
 					
 		}
-		for(int i=(int)(x);i<mapData.length && i*32< cam.getWidth();i++){
-			for(int j=(int)(y);j<mapData[i].length && j*32 <cam.getHeight();j++){
-				mapData[i][j].x = ((i*32) + xoffset)-cam.getX(); 
-				mapData[i][j].y = (j*32) -  cam.getY();
-				mapData[i][j].Draw(gl, 1);
+		for(int i=(int)(x);i<mapData.length && i*32*Engine.scale< cam.getWidth();i++){
+			for(int j=(int)(y);j<mapData[i].length && j*32*Engine.scale <cam.getHeight();j++){
+				mapData[i][j].x = ((i*(32)) );
+				mapData[i][j].y = (j*(32)) ;
+				mapData[i][j]. Draw( gl, cam,Engine.scale,xoffset);
 				
 			}
 			

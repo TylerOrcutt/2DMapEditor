@@ -35,16 +35,27 @@ public class Sprite  {
    }
    public void Draw(GL2 gl, Camera camera,float scale,float offset){
 	   if(spriteSheet!=null){
-	   spriteSheet.draw(gl, (offset+x+-camera.getX())*scale, (y-camera.getY())*scale, width*scale, height*scale, imgx, imgy);
+	   spriteSheet.draw(gl, (offset+(x+-camera.getX())*scale), (y-camera.getY())*scale, width*scale, height*scale, imgx, imgy);
 	   }else{
-		  
-		   SpriteRenderer.Draw(gl, offset+x-camera.getX(), y-camera.getY(), width, height, imgx, imgy,0,0);
+		   SpriteRenderer.toggleUseTexture();
+		   SpriteRenderer.Draw(gl, offset+((x+-camera.getX())*scale), (y-camera.getY())*scale, width*scale, height*scale, 0, 0,0,0);
+		   SpriteRenderer.toggleUseTexture();
 	   }
    }
    
    public void Draw(GL2 gl,float scale){
 	   if(spriteSheet!=null){
 		   spriteSheet.draw(gl, x*scale , y*scale , width*scale, height*scale, imgx, imgy);
+		   }else{
+			   SpriteRenderer.toggleUseTexture();
+			   SpriteRenderer.Draw(gl, x *scale, y*scale , width*scale, height*scale, imgx, imgy,0,0);
+			   SpriteRenderer.toggleUseTexture();
+		   }
+   }
+   
+   public void Draw(GL2 gl,float scale,float offsetx){
+	   if(spriteSheet!=null){
+		   spriteSheet.draw(gl, (x*scale)+offsetx , y*scale , width*scale, height*scale, imgx, imgy);
 		   }else{
 			   SpriteRenderer.toggleUseTexture();
 			   SpriteRenderer.Draw(gl, x *scale, y*scale , width*scale, height*scale, imgx, imgy,0,0);
