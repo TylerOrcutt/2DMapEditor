@@ -116,7 +116,7 @@ public static void Render(GLAutoDrawable drawable){
     	}
   }else{
 	  if(sizedMap!=null){
-		  sizedMap.Draw(gl, 0, 0,spriteFrame.width);
+		  sizedMap.Draw(gl,camera,spriteFrame.width);
 	  }
   }
     	

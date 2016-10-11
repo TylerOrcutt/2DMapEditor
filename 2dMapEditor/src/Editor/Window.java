@@ -32,12 +32,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
@@ -107,7 +109,15 @@ public class Window extends JFrame{
 			// TODO Auto-generated method stub
 			Engine.sprites.clear();
 			Engine.useSizedMap=true;
-			Engine.sizedMap = new SizedMap(10,10);
+			JTextField mwidth = new JTextField();
+			JTextField mheight = new JTextField();
+			final JComponent[] inputs = new JComponent[]{
+				new JLabel("Map Width"), mwidth,
+				new JLabel("Map Height"),mheight
+			};
+			int result = JOptionPane.showConfirmDialog(null, inputs, "New Map", JOptionPane.PLAIN_MESSAGE);
+
+			Engine.sizedMap = new SizedMap(Integer.parseInt(mwidth.getText()),Integer.parseInt(mheight.getText()));
 			
 		}
 	});
@@ -202,6 +212,18 @@ public class Window extends JFrame{
     toolbar.add(btn);
     btn = new JButton("");
     btn.setIcon(new ImageIcon("images/bluespawn.png"));
+    toolbar.add(btn);
+    
+    btn = new JButton("");
+    btn.setIcon(new ImageIcon("images/layer1.png"));
+    toolbar.add(btn);
+    
+    btn = new JButton("");
+    btn.setIcon(new ImageIcon("images/layer2.png"));
+    toolbar.add(btn);
+    
+    btn = new JButton("");
+    btn.setIcon(new ImageIcon("images/layer3.png"));
     toolbar.add(btn);
     this.add(toolbar,BorderLayout.NORTH);
     JTextField bsizeTxt = new JTextField(3);
