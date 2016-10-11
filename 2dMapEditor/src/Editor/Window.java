@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -58,6 +59,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.Animator;
 
 import Engine.Engine;
+import Engine.SizedMap;
 import Engine.SpriteRenderer;
 import Shaders.ShaderProgram;
 import io.FileWriter;
@@ -83,14 +85,76 @@ public class Window extends JFrame{
       
       JMenu newMenu = new JMenu("New");
       fileMenu.add(newMenu);
-      newMenu.add(new JMenuItem("Map"));
-      
+      JMenuItem mapmi = new JMenuItem("Map");
+      newMenu.add(mapmi);
+      mapmi.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Engine.sprites.clear();
+			Engine.useSizedMap=false;
+			Engine.sizedMap=null;
+			
+		}
+	});
+      mapmi = new JMenuItem("Sized Map");
+      newMenu.add(mapmi);
+      mapmi.addActionListener(new ActionListener() {
+  		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Engine.sprites.clear();
+			Engine.useSizedMap=true;
+			Engine.sizedMap = new SizedMap(10,10);
+			
+		}
+	});
       fileMenu.addSeparator();
-      fileMenu.add(new JMenuItem("Import"));
+ 
+      JMenuItem importbtn = new JMenuItem("Import");
+      fileMenu.add(importbtn);
+      importbtn.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		 
+			// TODO Auto-generated method stub
+			JFileChooser fc = new JFileChooser();
+			int rp= fc.showOpenDialog(null);
+			 if(rp == JFileChooser.APPROVE_OPTION){
+				 System.out.println("approved");
+				 String data=io.FileReader.ReadFile(fc.getSelectedFile().getPath());
+			 }else{
+				 System.out.println("Filed chooser canceled");
+			 }
+		}
+	});
+      
       fileMenu.addSeparator();
       newMenu = new JMenu("Export");
       fileMenu.add(newMenu);
-      newMenu.add(new JMenuItem("JSON"));
+      
+      JMenuItem jsonxbtn = new JMenuItem("JSON");
+      newMenu.add(jsonxbtn);
+      jsonxbtn.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser fc = new JFileChooser();
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int rp= fc.showOpenDialog(null);
+			 if(rp == JFileChooser.APPROVE_OPTION){
+				 System.out.println("approved");
+   System.out.println(fc.getSelectedFile().getAbsolutePath());
+				 FileWriter.writeFile(fc.getSelectedFile().getAbsolutePath()+"/test.map");
+			 }else{
+				 System.out.println("File chooser canceled");
+			 }
+			
+		}
+	});
       newMenu.add(new JMenuItem("Block"));
       fileMenu.addSeparator();
       
@@ -193,9 +257,9 @@ testbtn.addActionListener(new ActionListener() {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		try{
-			FileWriter.writeFile("test.map");
+			FileWriter.writeFile(".test.map");
 			
-		Runtime.getRuntime().exec("./PETest -dev -m "+ "./test.map");
+		Runtime.getRuntime().exec("./PETest -dev -m "+ "./.test.map");
 		}catch(Exception e1){
 			
 		}

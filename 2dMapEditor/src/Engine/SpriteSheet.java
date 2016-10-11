@@ -66,9 +66,11 @@ public class SpriteSheet {
 	    	if(texture!=null){
                 texture.bind(gl);
 	    	}
-	       float sx=(1.0f/getTextureWidth())*32*imgx;
+	    	
+	       float sx=(1.0f/getTextureWidth())*32.f*imgx;
 	        float sy=(1.0f/getTextureHeight())*32*imgy;
 	     //   SpriteRenderer.Draw(x,y,w,h,sx,sy,getActualSpriteWidth(),getActualSpriteHeight());
+               sx+=(1.0f/getTextureWidth()) ;
                
 	    	 SpriteRenderer.Draw(gl, x, y, width, height,sx,sy,getActualSpriteWidth(),getActualSpriteHeight());
 	    }
@@ -94,9 +96,9 @@ public class SpriteSheet {
 	        return  height/sheetRows;
 	    }
 	    public float getActualSpriteWidth(){
-	        return (1.0f/getTextureWidth())*32;
+	        return (1.0f/getTextureWidth())*30f;
 	    }
 	    public float getActualSpriteHeight(){
-	        return (1.0f/getTextureHeight())*32;
+	        return (1.0f/getTextureHeight())*31;
 	}
 }

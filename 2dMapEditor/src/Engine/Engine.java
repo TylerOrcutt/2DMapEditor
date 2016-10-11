@@ -44,6 +44,8 @@ public class Engine {
   public static boolean didInit=false;
   public static SpriteFrame spriteFrame;
   public static boolean shiftDown=false;
+  public static boolean useSizedMap=false;
+  public static SizedMap sizedMap;
   public static boolean initEngine() {
 
   sprites  = new ArrayList<Sprite>();
@@ -106,11 +108,17 @@ public static void Render(GLAutoDrawable drawable){
 	//System.out.println("Draw");
 	 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); 
   spriteFrame.Draw(gl);
+  if(!useSizedMap){
     for (Sprite sprite : sprites) {
     	if( sprite.x-camera.getX() >=0){
 		sprite.Draw(gl, camera,scale,spriteFrame.width);
     	}
     	}
+  }else{
+	  if(sizedMap!=null){
+		  sizedMap.Draw(gl, 0, 0,spriteFrame.width);
+	  }
+  }
     	
     if(drawGrid){
     
@@ -160,7 +168,7 @@ public static void KeyRelease(KeyEvent e){
 
 public static void MousePress(MouseEvent e){
 	System.out.println("Button" +e.getButton()+ "    mouseX: "+ ( e.getX()-spriteFrame.width+camera.getX()) + "   MouseY: " + (e.getY()+camera.getY()));
-	
+
 	if(e.getButton()==1){
 		if(e.getX()>=spriteFrame.width-5  && e.getX()<=spriteFrame.width+5 ){
 			spriteFrame.sliderDragged=true;
@@ -171,6 +179,12 @@ public static void MousePress(MouseEvent e){
 			spriteFrame.sp.onClick(e,shiftDown);
 			return;
 		}
+		
+		
+		 if(useSizedMap){
+			 sizedMap.MousePress(( e.getX()-spriteFrame.width+camera.getX()), e.getY()+camera.getY(), e.getButton());
+			 return;
+		 }
     float mouseX = (e.getX()-spriteFrame.width/scale)+camera.getX();
     float mouseY = (e.getY()/scale)+camera.getY();
     float posx=32.f;
@@ -188,6 +202,7 @@ public static void MousePress(MouseEvent e){
 	    }
 
 	ArrayList<selection> selected = spriteFrame.sp.getSelected();
+	if(selected.size()<=0){return;}
      float baseX = selected.get(0).selectionX;
 	float baseY=selected.get(0).selectionY;
 	for(int i=0;i<selected.size();i++){
@@ -237,6 +252,16 @@ public static void MousePress(MouseEvent e){
 	}
 }
 public static void MouseRelease(MouseEvent e){
+	if(spriteFrame.sliderDragged){
+		ArrayList<selection> selected = spriteFrame.sp.getSelected();
+		for(int i=0;i<selected.size();i++){
+			 selection sel = selected.get(i);
+			 if(sel.selectionX>=spriteFrame.width-5){
+				 selected.remove(i);
+			 }
+		
+		}
+	}
 	spriteFrame.sliderDragged=false;
 }
 public static void mouseWheelMove(MouseWheelEvent e){

@@ -18,7 +18,7 @@ public class SpriteFrame {
 	public void Draw(GL2 gl){
 		sp.Draw(gl);
 		SpriteRenderer.setUseTexture(false);
-		   gl.glColor4f(.7f,.3f,.3f,1.f);
+		   gl.glColor4f(.75f,.75f,.75f,10.f);
 		      SpriteRenderer.Draw(gl, width-(5/2.0f), 0,5, Engine.Engine.height,0,0,0,0);//top
 		SpriteRenderer.setUseTexture(true);
 		 
@@ -26,6 +26,9 @@ public class SpriteFrame {
 	
 	public void sliderDrag(float x,float y){
 		if(!sliderDragged){
+			return;
+		}
+		if(x<=5){
 			return;
 		}
 		width=x;

@@ -46,8 +46,9 @@ public class Sprite  {
 	   if(spriteSheet!=null){
 		   spriteSheet.draw(gl, x*scale , y*scale , width*scale, height*scale, imgx, imgy);
 		   }else{
-			  
+			   SpriteRenderer.toggleUseTexture();
 			   SpriteRenderer.Draw(gl, x *scale, y*scale , width*scale, height*scale, imgx, imgy,0,0);
+			   SpriteRenderer.toggleUseTexture();
 		   }
    }
    public void Draw(GL2 gl){

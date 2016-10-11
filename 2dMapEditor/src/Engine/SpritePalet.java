@@ -40,8 +40,14 @@ public class SpritePalet {
 	public void Draw(GL2 gl){
 		
 	  // sheet.draw(gl, 0, 0, sheet.width, sheet.height, 0, 0);
-  	 
-		SpriteRenderer.Draw(gl, 0, 0,Engine.spriteFrame.width, sheet.height,0,0,(1.f/sheet.width)*Engine.spriteFrame.width,1.f);
+  	 float drawWidth=1.f;
+  	 float fwidth= Engine.spriteFrame.width;
+  	 if(Engine.spriteFrame.width<sheet.width){
+  		drawWidth=(1.f/sheet.width)*Engine.spriteFrame.width;
+  	 }else{
+  		 fwidth=sheet.width;
+  	 }
+		SpriteRenderer.Draw(gl, 0, 0,fwidth, sheet.height,0,0,drawWidth,1.f);
 		this.DrawSelectioNSquare(gl);
 
 	  
