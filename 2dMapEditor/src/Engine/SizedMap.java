@@ -42,8 +42,8 @@ public class SizedMap extends Map{
 			y/=32;
 					
 		}
-		for(int i=(int)(x);i<mapData.length && i*32*Engine.scale< cam.getWidth();i++){
-			for(int j=(int)(y);j<mapData[i].length && j*32*Engine.scale <cam.getHeight();j++){
+		for(int i=(int)(x);i<mapData.length && i*32*Engine.scale< cam.getX()+cam.getWidth();i++){
+			for(int j=(int)(y);j<mapData[i].length && j*32*Engine.scale <cam.getY()+cam.getHeight();j++){
 				mapData[i][j].x = ((i*(32)) );
 				mapData[i][j].y = (j*(32)) ;
 				mapData[i][j]. Draw( gl, cam,Engine.scale,xoffset);
@@ -58,14 +58,36 @@ public class SizedMap extends Map{
 			if(Engine.sp==null){
 				return;
 			}
-			x/=32;
-			y/=32;
+			
+			//offset+(x+-camera.getX())*scale),
+			
+			x-=Engine.spriteFrame.width;
+			
+			//x+=Engine.camera.getX();
+			x+=Engine.camera.getX()*Engine.scale;
+			x/=(32*Engine.scale);
+		   // x=(float)Math.floor(x); 
+			//x*=32;
+			
+			
+			
+		//	x+=Engine.spriteFrame.width;
+			
+			//y/=(32*Engine.scale);
+			y+=Engine.camera.getY()*Engine.scale;
+			y/=32*Engine.scale;
+			//Math.floor(y);
+			 
+			
 			if(x<0 || x>width){
 				return;
 			}
 			if(y<0 || y>height){
 				return;
 			}
+			
+			System.out.println("Button" +button+ "    mouseX: "+ ( x) + "   MouseY: " + (y));
+
 			ArrayList<selection> selected = Engine.spriteFrame.sp.getSelected();
 			 if(selected.size()==0){return;}
 			mapData[(int)x][(int)y].spriteSheet=Engine.sp;

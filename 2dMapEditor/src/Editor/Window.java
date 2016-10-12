@@ -88,7 +88,7 @@ public class Window extends JFrame{
       JMenu newMenu = new JMenu("New");
       fileMenu.add(newMenu);
       JMenuItem mapmi = new JMenuItem("Map");
-      newMenu.add(mapmi);
+     // newMenu.add(mapmi);
       mapmi.addActionListener(new ActionListener() {
 		
 		@Override
@@ -100,7 +100,7 @@ public class Window extends JFrame{
 			
 		}
 	});
-      mapmi = new JMenuItem("Sized Map");
+      mapmi = new JMenuItem("Map");
       newMenu.add(mapmi);
       mapmi.addActionListener(new ActionListener() {
   		
@@ -110,9 +110,9 @@ public class Window extends JFrame{
 			Engine.sprites.clear();
 			Engine.useSizedMap=true;
 			JTextField mwidth = new JTextField();
-			mwidth.setText("4096");
+			mwidth.setText("16");
 			JTextField mheight = new JTextField();
-			mheight.setText("4096");
+			mheight.setText("16");
 			final JComponent[] inputs = new JComponent[]{
 				new JLabel("Map Width"), mwidth,
 				new JLabel("Map Height"),mheight

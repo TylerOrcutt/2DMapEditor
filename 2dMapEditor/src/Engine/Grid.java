@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.jogamp.opengl.GL2;
 
+import Camera.Camera;
+
 public class Grid {
 private ArrayList<Sprite>lines;
 
@@ -13,12 +15,13 @@ public Grid(){
 }
 
 public void Draw(GL2 gl){
-	gl.glColor4f(.44f, .44f, .44f, .50f);
-	SpriteRenderer.setUseTexture(false);
+	//gl.glColor4f(.44f, .44f, .44f, .50f);
+	gl.glColor4f(1.f, 0.f, 0.f, 1f);
+	//SpriteRenderer.setUseTexture(false);
 	for (Sprite sprite : lines) {
-		sprite.Draw(gl);
+		sprite.Draw(gl,Engine.camera,Engine.scale,Engine.spriteFrame.width);
 	}
-	SpriteRenderer.setUseTexture(true);
+	//SpriteRenderer.setUseTexture(true);
 }
 public void generateGrid(){
 	generateGrid(Engine.width, Engine.height, Engine.scale);
@@ -27,20 +30,41 @@ public void generateGrid(float width,float height,float scale){
 	lines.clear();
 	float offset=0;
 	if(Engine.spriteFrame.visiable){
-		offset=Engine.spriteFrame.width;
+	//	offset=Engine.spriteFrame.width;
 	}
-	for(float i=offset+32*scale;i<=width;i+=32*scale){
+	if(Engine.sizedMap==null){
+		return;
+	}
+	width=Engine.sizedMap.width*32;
+	height=Engine.sizedMap.height*32;
+	for(float i=(32);i<=width;i+=32){
 		Sprite sprite= new Sprite(null);
-		sprite.resize(5, height);
-		sprite.move(i-2.5f, 0);
+		sprite.resize(1, height);
+		sprite.move(i-0.5f, 0);
 		lines.add(sprite);
 	}
-	for(int i=0;i<=height;i+=32*scale){
+	for(float i=0;i<=height;i+=32){
 		Sprite sprite= new Sprite(null);
-		sprite.resize(width-offset, 5);
-		sprite.move(offset, i-2.5f);
+		sprite.resize(width-offset, 1);
+		sprite.move(offset, i-0.5f);
 		lines.add(sprite);
 	}
+	
+/*	if(Engine.sizedMap!=null){
+		for(float i=0-Engine.camera.getX();i<=0-Engine.camera.getX()+Engine.sizedMap.width;i+=32*scale){
+			Sprite sprite= new Sprite(null);
+			sprite.resize(1, height);
+			sprite.move(offset+(i-Engine.camera.getX())-0.5f, 0);
+			lines.add(sprite);
+		}
+		for(int i=(int) (0-Engine.camera.getY());i<=0-Engine.camera.getY()+Engine.sizedMap.height;i+=32*scale){
+			Sprite sprite= new Sprite(null);
+			sprite.resize(width-offset, 1);
+			sprite.move(offset, i-0.5f);
+			lines.add(sprite);
+		}
+	}*/
+	
 }
 public void resize(float width,float height){
  generateGrid();

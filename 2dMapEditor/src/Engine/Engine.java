@@ -46,6 +46,8 @@ public class Engine {
   public static boolean shiftDown=false;
   public static boolean useSizedMap=false;
   public static SizedMap sizedMap;
+  public static boolean cameraDragged=false;
+  public static float camDragx=0,camDragy=0;
   public static boolean initEngine() {
 
   sprites  = new ArrayList<Sprite>();
@@ -167,7 +169,7 @@ public static void KeyRelease(KeyEvent e){
 }
 
 public static void MousePress(MouseEvent e){
-	System.out.println("Button" +e.getButton()+ "    mouseX: "+ ( e.getX()-spriteFrame.width+camera.getX()) + "   MouseY: " + (e.getY()+camera.getY()));
+	//System.out.println("Button" +e.getButton()+ "    mouseX: "+ ( e.getX()-spriteFrame.width+camera.getX()) + "   MouseY: " + (e.getY()+camera.getY()));
 
 	if(e.getButton()==1){
 		if(e.getX()>=spriteFrame.width-5  && e.getX()<=spriteFrame.width+5 ){
@@ -182,7 +184,7 @@ public static void MousePress(MouseEvent e){
 		
 		
 		 if(useSizedMap){
-			 sizedMap.MousePress(( e.getX()-spriteFrame.width+camera.getX()), e.getY()+camera.getY(), e.getButton());
+			 sizedMap.MousePress(( e.getX()), e.getY(), e.getButton());
 			 return;
 		 }
     float mouseX = (e.getX()-spriteFrame.width/scale)+camera.getX();
@@ -250,6 +252,12 @@ public static void MousePress(MouseEvent e){
 		
 		
 	}
+	
+	if(e.getButton()==2 && e.getX()>spriteFrame.width){
+		cameraDragged=true;
+		camDragx = e.getX();
+		camDragy=e.getY();
+	}
 }
 public static void MouseRelease(MouseEvent e){
 	if(spriteFrame.sliderDragged){
@@ -262,17 +270,23 @@ public static void MouseRelease(MouseEvent e){
 		
 		}
 	}
+	if(e.getButton()==2 && cameraDragged){
+		cameraDragged=false;
+	}
 	spriteFrame.sliderDragged=false;
 }
 public static void mouseWheelMove(MouseWheelEvent e){
 	if(ctrlDown){
 		//System.out.println(e.getWheelRotation());
-		
-		if(e.getWheelRotation()==1){ //zoomout
+  if(e.getWheelRotation()==1){ //zoomout
 			if(scale>.25){
 				scale-=.25f;
 				grid.generateGrid();
 			    camera.orient(centerX, centerY);
+			}else if(scale<=.25 &&scale >0.1 ){
+			//	scale-=.05f;
+				//grid.generateGrid();
+				
 			}
 		}
 	if(e.getWheelRotation()==-1){ //zoomin
@@ -288,6 +302,16 @@ public static void mouseWheelMove(MouseWheelEvent e){
 }
 public static void mouseDragged(MouseEvent e) {
 	spriteFrame.sliderDrag((float)e.getX(),(float)e.getY());
+	if(cameraDragged){
+		float cx = (e.getX()-camDragx)*(1.5f/scale);
+		camDragx=e.getX();
+		float cy = (e.getY() - camDragy)*(1.5f/scale);
+		camDragy=e.getY();
+		camera.move(camera.getX()-cx, camera.getY()-cy);
+		grid.generateGrid();
+	 
+		//}
+	}
 }
 public static boolean mouseMoved(MouseEvent e) {
 	if(e.getX()>=spriteFrame.width-5  && e.getX()<=spriteFrame.width+5 ){
