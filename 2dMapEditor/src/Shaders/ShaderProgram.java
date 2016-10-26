@@ -26,15 +26,18 @@ public class ShaderProgram {
 	    
 	    ShaderCode fragmentShader = ShaderCode.create(gl, gl.GL_FRAGMENT_SHADER, this.getClass(), ".", null, "shaders/fragmentshader", "glsl", null, true);
 	    program = new  com.jogamp.opengl.util.glsl.ShaderProgram();
+	   
 	    program.add(vertexShader);
 	    program.add(fragmentShader);
+	   // vertexShader.compile(gl);
+	 //   fragmentShader.compile(gl);
 	    program.link(gl, System.out);
 	     System.out.println("Shader program ID: " + program.id());
-	 	int vPosx=gl.glGetUniformLocation(program.id(), "vposx");
+	 /*	int vPosx=gl.glGetUniformLocation(program.id(), "vposx");
 		int vPosy=	gl.glGetUniformLocation(program.id(), "vposy");
 		 int vScalex=gl.glGetUniformLocation(program.id(), "vScaleX");
 		 System.out.println("vPosX:" + vPosx);
-	  gl.glUseProgram(program.id());
+	 */// gl.glUseProgram(program.id());
 		
 
  	

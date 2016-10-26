@@ -18,10 +18,32 @@ public void Draw(GL2 gl){
 	//gl.glColor4f(.44f, .44f, .44f, .50f);
 	gl.glColor4f(1.f, 0.f, 0.f, 1f);
 	//SpriteRenderer.setUseTexture(false);
+	   Engine.spriteRenderer.toggleUseTexture();
 	for (Sprite sprite : lines) {
-		sprite.Draw(gl,Engine.camera,Engine.scale,Engine.spriteFrame.width);
+		   float cy = (sprite.y-Engine.camera.getY())*Engine.scale;
+		   float cx = (Engine.spriteFrame.width+(sprite.x+-Engine.camera.getX())*Engine.scale);
+		//sprite.Draw(gl,Engine.camera,Engine.scale,Engine.spriteFrame.width);
+		float twidth=sprite.width;
+		   if(sprite.width==Engine.sizedMap.width*32*Engine.scale && cx<Engine.spriteFrame.width){
+			   cx=Engine.spriteFrame.width;
+			   twidth=((((Engine.sizedMap.width)*32)-Engine.camera.getX())*Engine.scale) ;
+			  
+		   }
+ 
+		   if(twidth<0){
+			   continue;
+		   }
+		   
+		   if(cx<Engine.spriteFrame.width){
+			   continue;
+		   }
+		   
+	
+		   Engine.spriteRenderer.Draw(gl, cx, cy, twidth, sprite.height, 0, 0,0,0);
+		
 	}
-	//SpriteRenderer.setUseTexture(true);
+	   Engine.spriteRenderer.toggleUseTexture();
+ 
 }
 public void generateGrid(){
 	generateGrid(Engine.width, Engine.height, Engine.scale);
@@ -32,18 +54,18 @@ public void generateGrid(float width,float height,float scale){
 	if(Engine.spriteFrame.visiable){
 	//	offset=Engine.spriteFrame.width;
 	}
-	if(Engine.sizedMap==null){
+/*	if(Engine.sizedMap==null){
 		return;
-	}
-	width=Engine.sizedMap.width*32;
-	height=Engine.sizedMap.height*32;
-	for(float i=(32);i<=width;i+=32){
+	}*/
+	width=width*32*scale;
+	height=height*32*scale;
+	for(float i=(32);i<=width/scale;i+=32){
 		Sprite sprite= new Sprite(null);
 		sprite.resize(1, height);
 		sprite.move(i-0.5f, 0);
 		lines.add(sprite);
 	}
-	for(float i=0;i<=height;i+=32){
+	for(float i=0;i<=height/scale;i+=32){
 		Sprite sprite= new Sprite(null);
 		sprite.resize(width-offset, 1);
 		sprite.move(offset, i-0.5f);

@@ -1,5 +1,7 @@
 package Editor;
 
+import Windows.Window;
+
 public class Main {
 	static String loc;
  public static void main(String arvs[]){

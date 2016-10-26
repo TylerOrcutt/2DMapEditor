@@ -9,7 +9,8 @@ import Camera.Camera;
 
 public class SizedMap extends Map{
   public Sprite[][] mapData;
-  float width,height;
+  int width,height;
+  float scale=1.f;
   
 	
 	public SizedMap(int width,int height){
@@ -42,11 +43,11 @@ public class SizedMap extends Map{
 			y/=32;
 					
 		}
-		for(int i=(int)(x);i<mapData.length && i*32*Engine.scale< cam.getX()+cam.getWidth();i++){
-			for(int j=(int)(y);j<mapData[i].length && j*32*Engine.scale <cam.getY()+cam.getHeight();j++){
+		for(int i=(int)(x);i<mapData.length && i*32*scale< cam.getX()+cam.getWidth();i++){
+			for(int j=(int)(y);j<mapData[i].length && j*32*scale <=cam.getY()+cam.getHeight();j++){
 				mapData[i][j].x = ((i*(32)) );
 				mapData[i][j].y = (j*(32)) ;
-				mapData[i][j]. Draw( gl, cam,Engine.scale,xoffset);
+				mapData[i][j]. Draw( gl, Engine.spriteRenderer,cam,scale,xoffset);
 				
 			}
 			
@@ -58,31 +59,20 @@ public class SizedMap extends Map{
 			if(Engine.sp==null){
 				return;
 			}
-			
-			//offset+(x+-camera.getX())*scale),
-			
-			x-=Engine.spriteFrame.width;
-			
-			//x+=Engine.camera.getX();
-			x+=Engine.camera.getX()*Engine.scale;
-			x/=(32*Engine.scale);
-		   // x=(float)Math.floor(x); 
-			//x*=32;
-			
-			
-			
-		//	x+=Engine.spriteFrame.width;
-			
-			//y/=(32*Engine.scale);
-			y+=Engine.camera.getY()*Engine.scale;
-			y/=32*Engine.scale;
-			//Math.floor(y);
 			 
 			
-			if(x<0 || x>width){
+			x-=Engine.spriteFrame.width;
+			x+=Engine.camera.getX()*scale;
+			x/=(32*scale);
+	 
+			y+=Engine.camera.getY()*scale;
+			y/=32*scale;
+		 
+			
+			if(x<0 || x>=width){
 				return;
 			}
-			if(y<0 || y>height){
+			if(y<0 || y>=height){
 				return;
 			}
 			
@@ -90,11 +80,45 @@ public class SizedMap extends Map{
 
 			ArrayList<selection> selected = Engine.spriteFrame.sp.getSelected();
 			 if(selected.size()==0){return;}
-			mapData[(int)x][(int)y].spriteSheet=Engine.sp;
+			mapData[(int)x][(int)y].spriteSheet=Engine.sp.get(0);
 			selection sel =  selected.get(0);
 			mapData[(int)x][(int)y].setImgLoc((int)sel.selectionX/32,(int)sel.selectionY/32);
 			
 		}
 		
+	}
+	public void onScaleChange(float change){
+		if(change<0 && scale>.25){
+			scale+=change;
+			
+		}
+		if(change>0 && scale<10){
+			scale+=change;
+		}
+		//this.scale= scale;
+	}
+	public String generateJSON(){
+		String json="";
+		 json+="\"Map\":{";
+		 json+="\"width\":\""+width+"\",";
+		 json+="\"height\":\""+height+"\",";
+		 json+="}";
+		for(int i=0;i<width;i++){
+			for(int j=0;j<height;j++){
+			 json+="\"Block\":{";
+			 json+="\"x\":\""+mapData[i][j].x+"\",";
+			 json+="\"y\":\""+mapData[i][j].y+"\",";
+			 json+="\"width\":\""+mapData[i][j].width+"\",";
+			 json+="\"height\":\""+mapData[i][j].height+"\"";
+			 json+="\"imgx\":\""+mapData[i][j].imgx+"\"";
+			 json+="\"imgy\":\""+mapData[i][j].imgy+"\"";
+			 json+="}";
+			 if(width+height>2 && j<height-1 && i<width-1){
+				 json+=",";
+			 }
+			}
+		}
+		
+		return json;
 	}
 }

@@ -17,45 +17,53 @@ import com.jogamp.opengl.util.PMVMatrix;
 import Shaders.ShaderProgram;
 
 public class SpriteRenderer {
-public static GL2 gl;
-public static ShaderProgram shaderProgram;
-public static final int COORDS_PER_VERTEX=3;
+public   GL2 gl;
+public  ShaderProgram shaderProgram;
+public  final int COORDS_PER_VERTEX=3;
 
 
-public static int cubeVAOID[];
-public static int cubeVBOID[];
-public static FloatBuffer cubeData;
-public static FloatBuffer TextureData;
+public  int cubeVAOID[];
+public  int cubeVBOID[];
+public  FloatBuffer cubeData;
+public  FloatBuffer TextureData;
 
-public static int vPosition=-1;
-public static int vPosx;
-public static int vPosy;
-public static int vScalex;
-public static int vScaley;
-public static int tPosx;
-public static int tPosy;
-public static int tScalex;
-public static int tScaley;
-public static int mTextLoc;
-public static int mSamplerLoc;
-public static int useTexture;
-public static boolean utexture=true;
-public static boolean isInit=false;
+public  int vPosition=-1;
+public  int vPosx;
+public  int vPosy;
+public  int vScalex;
+public  int vScaley;
+public  int tPosx;
+public  int tPosy;
+public  int tScalex;
+public  int tScaley;
+public  int mTextLoc;
+public  int mSamplerLoc;
+public  int useTexture;
+public  boolean utexture=true;
+public  boolean isInit=false;
 
 
-static float viewMatrix[];
-public static void init(GL2 gl,ShaderProgram shaderProgram){
+//static float viewMatrix[];
+public  SpriteRenderer(){
+	
+}
+public  SpriteRenderer(GL2 gl){
+
+    shaderProgram = new ShaderProgram(gl,"vertexshader.glsl","fragmentshader.glsl");
+}
+public  void init(GL2 gl){
 	System.out.println("Initilizing sprite renderer");
 //	if(isInit){
 
 	//	return;
 	//}
-	SpriteRenderer.gl=gl;
+	this.gl=gl;
+	gl.glUseProgram(shaderProgram.id());
+	
 		gl.glEnable(gl.GL_TEXTURE_2D);
 		   gl.glEnable(gl.GL_BLEND);
 		   gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE_MINUS_SRC_ALPHA);
 
-		   SpriteRenderer.shaderProgram = shaderProgram;
 		gl.glUseProgram(shaderProgram.id());
 	  gl.glEnableClientState(gl.GL_VERTEX_ARRAY);
 	 	  gl.glEnable(GL2.GL_DEPTH_TEST);
@@ -91,28 +99,18 @@ gl.glEnableVertexAttribArray(vPosition);
        
        	System.out.println("Initilizing sprite renderer compelete");
 }
-public static void Resize(GL2 gl, float width,float height){
+public  void Resize(GL2 gl, float width,float height){
 	gl.glUseProgram(shaderProgram.id());
     gl.glEnable(gl.GL_BLEND);
-gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE_MINUS_SRC_ALPHA);
- 
- 
-		
-
-gl.glMatrixMode(GL2.GL_PROJECTION);
-gl.glLoadIdentity();
-
-
-gl.glOrtho(0, width, height,0, 0,50);
-
-gl.glMatrixMode(GL2.GL_MODELVIEW);
-gl.glLoadIdentity();
-
-
- 
+    gl.glBlendFunc(gl.GL_ONE, gl.GL_ONE_MINUS_SRC_ALPHA);
+    gl.glMatrixMode(GL2.GL_PROJECTION);
+    gl.glLoadIdentity();
+    gl.glOrtho(0, width, height,0, 0,50);
+    gl.glMatrixMode(GL2.GL_MODELVIEW);
+    gl.glLoadIdentity();
 }
 
-public static void Draw(GL2 gl,float x,float y,float width,float height,float imgx,float imgy,float imgwidth,float imgheight){
+public void Draw(GL2 gl,float x,float y,float width,float height,float imgx,float imgy,float imgwidth,float imgheight){
 	//System.out.println("sprite draw");
 	gl.glUseProgram(shaderProgram.id());
  
@@ -154,11 +152,11 @@ public static FloatBuffer genVertexBuffer(float renderWidth,float renderHeight){
     return buf;
 
 }
-public static void toggleUseTexture(){
+public void toggleUseTexture(){
    setUseTexture(!utexture);
 	
 }
-public static void setUseTexture(boolean use){
+public  void setUseTexture(boolean use){
 	utexture=use;
 	if(utexture){
 	gl.glUniform1i(useTexture, 1);

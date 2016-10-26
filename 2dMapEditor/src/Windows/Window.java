@@ -1,4 +1,4 @@
-package Editor;
+package Windows;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -60,9 +60,12 @@ import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.Animator;
 
+import Editor.MapRenderer;
+import Editor.Tabbar;
 import Engine.Engine;
 import Engine.SizedMap;
 import Engine.SpriteRenderer;
+import Props.PropWindow;
 import Shaders.ShaderProgram;
 import io.FileWriter;
 
@@ -97,6 +100,7 @@ public class Window extends JFrame{
 			Engine.sprites.clear();
 			Engine.useSizedMap=false;
 			Engine.sizedMap=null;
+		
 			
 		}
 	});
@@ -118,8 +122,20 @@ public class Window extends JFrame{
 				new JLabel("Map Height"),mheight
 			};
 			int result = JOptionPane.showConfirmDialog(null, inputs, "New Map", JOptionPane.PLAIN_MESSAGE);
-
-			Engine.sizedMap = new SizedMap(Integer.parseInt(mwidth.getText()),Integer.parseInt(mheight.getText()));
+			
+			
+			Tabbar.addTab(new MapRenderer(Integer.parseInt(mwidth.getText()),Integer.parseInt(mheight.getText())));
+			//Engine.sizedMap = new SizedMap(Integer.parseInt(mwidth.getText()),Integer.parseInt(mheight.getText()));
+			//Engine.grid.generateGrid();
+		}
+	});
+      
+      JMenuItem pemi = new JMenuItem("Prop");
+       newMenu.add(pemi);
+      pemi.addActionListener(new ActionListener() {
+  		
+		@Override
+		public void actionPerformed(ActionEvent e) {
 			
 		}
 	});
@@ -171,14 +187,20 @@ public class Window extends JFrame{
       fileMenu.addSeparator();
       
  
-      fileMenu.addSeparator();
+ //     fileMenu.addSeparator();
       fileMenu.add(new JMenuItem("Exit"));
+      fileMenu = new JMenu("Edit");
+      JCheckBoxMenuItem snapCheck =new JCheckBoxMenuItem("Snap to Grid",true);
+      fileMenu.add(snapCheck);
+      menubar.add(fileMenu);
       
       fileMenu = new JMenu("View");
       JCheckBoxMenuItem gridcheck =new JCheckBoxMenuItem("Show Grid",true);
       fileMenu.add(gridcheck);
+      fileMenu.addSeparator();
       
-      
+      fileMenu.add(new JMenuItem("Props"));
+      fileMenu.add(new JMenuItem("TileSheet"));
       JMenu statusm = new JMenu();
       statusm.add(new JMenuItem("Exit"));
       this.add(statusm,BorderLayout.SOUTH);
@@ -195,6 +217,8 @@ public class Window extends JFrame{
 	});
       menubar.add(fileMenu);
  
+      
+
       
     this.setJMenuBar(menubar);
 
@@ -297,6 +321,7 @@ testbtn.addActionListener(new ActionListener() {
  
   final Animator ani = new Animator();
    ani.setUpdateFPSFrames(60, null);
+
     
      canvas.addGLEventListener(new GLEventListener() {
 		
@@ -327,6 +352,7 @@ testbtn.addActionListener(new ActionListener() {
 			
 		}
 	});
+     
      
  
      JPanel leftp = new JPanel(new BorderLayout());

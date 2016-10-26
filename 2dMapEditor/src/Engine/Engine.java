@@ -20,15 +20,16 @@ import com.jogamp.opengl.util.glsl.ShaderCode;
 
 import Camera.Camera;
 import Editor.SpriteFrame;
+import Editor.Tabbar;
 import Shaders.ShaderProgram;
 
 
 public class Engine {
 
-	static ShaderProgram shaders;
+	public static SpriteRenderer spriteRenderer;
   public static int width,height;
 
-  public static SpriteSheet sp;
+  public static ArrayList<SpriteSheet> sp;
   public static Sprite sprite;
  
   public static Camera camera;
@@ -51,6 +52,7 @@ public class Engine {
   public static boolean initEngine() {
 
   sprites  = new ArrayList<Sprite>();
+  sp = new ArrayList<>();
   grid= new Grid();   
 		
   camera = new Camera();
@@ -62,22 +64,25 @@ public class Engine {
   public static void initAssets(GLAutoDrawable drawable){
 	  GL2 gl = drawable.getGL().getGL2();
 
-	    sp= new SpriteSheet(gl,"images/sp2.png", 20, 15); 
-	    spriteFrame = new SpriteFrame(sp);  
+	 //   sp.add( new SpriteSheet(gl,"images/sp2.png", 20, 15)); 
+	   // spriteFrame = new SpriteFrame(sp.get(0));  
   }
   public static void initShaders(GLAutoDrawable drawable){
 	  GL2 gl = drawable.getGL().getGL2();
-	   while(SpriteRenderer.vPosition<0){
-		 	 shaders = new ShaderProgram(gl,"vertexshader.glsl","fragmentshader.glsl");
-			     SpriteRenderer.init(gl, shaders);
-			     
+  if(spriteRenderer ==null){
+		 	  spriteRenderer = new SpriteRenderer(gl);
+			     spriteRenderer.init(gl);
+  
 			     gl.glEnable(GL2.GL_DEPTH_TEST); 
 			     gl.glDepthFunc(GL2.GL_LEQUAL);   
 			     gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);  
 			     gl.glShadeModel(GL2.GL_SMOOTH); 
 			     gl.glClearDepth(1.0f); 
 			     gl.glClearColor(0, 0, 0, 1);
-	 }
+				    sp.add( new SpriteSheet(gl,"images/sp2.png", 20, 15)); 
+				    spriteFrame = new SpriteFrame(sp.get(0));  
+				    Tabbar.init();
+  }
   }
  
 public static void resize(GLAutoDrawable drawable,int x,int y, int width,int height){
@@ -94,13 +99,13 @@ public static void resize(GLAutoDrawable drawable,int x,int y, int width,int hei
 
    Engine.width=width;
     Engine.height=height;
-    
+    Tabbar.Resize(width, height);
     camera.resize(width, height);
     camera.orient(centerX, centerY);
 
-  SpriteRenderer.Resize(gl, width, height);
+  spriteRenderer.Resize(gl, width, height);
     
-     grid.resize(width, height);
+    // grid.resize(width, height);
   System.out.println("Total Sprites: "+sprites.size());
  
 }
@@ -110,10 +115,12 @@ public static void Render(GLAutoDrawable drawable){
 	//System.out.println("Draw");
 	 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); 
   spriteFrame.Draw(gl);
-  if(!useSizedMap){
+ /* if(!useSizedMap){
+	  
+	  
     for (Sprite sprite : sprites) {
     	if( sprite.x-camera.getX() >=0){
-		sprite.Draw(gl, camera,scale,spriteFrame.width);
+		sprite.Draw(gl, spriteRenderer,camera,scale,spriteFrame.width);
     	}
     	}
   }else{
@@ -121,11 +128,17 @@ public static void Render(GLAutoDrawable drawable){
 		  sizedMap.Draw(gl,camera,spriteFrame.width);
 	  }
   }
-    	
-    if(drawGrid){
+  
+  
+    */	
+
+  
+Tabbar.Draw(gl);
+  if(drawGrid){
     
-   grid.Draw(gl);
+  //. grid.Draw(gl);
     }
+
  
 }
 public static void KeyPress(KeyEvent e){
@@ -183,8 +196,16 @@ public static void MousePress(MouseEvent e){
 		}
 		
 		
+		
+	if(true){	
+	Tabbar.onMouseClick( e.getButton(), e.getX(), e.getY());
+		
+		return;
+	}
 		 if(useSizedMap){
-			 sizedMap.MousePress(( e.getX()), e.getY(), e.getButton());
+			// sizedMap.MousePress(( e.getX()), e.getY(), e.getButton());
+			// Tabbar.activeTab.onMouseClick( e.getButton(), e.getX(), e.getY());
+			 
 			 return;
 		 }
     float mouseX = (e.getX()-spriteFrame.width/scale)+camera.getX();
@@ -210,7 +231,7 @@ public static void MousePress(MouseEvent e){
 	for(int i=0;i<selected.size();i++){
 		 selection sel = selected.get(i);
 
-		Sprite s = new Sprite(sp);
+		Sprite s = new Sprite(sp.get(0));
 	
 			float tposx=posx+(sel.selectionX-baseX)*(brushSize/32);
 			
@@ -279,22 +300,20 @@ public static void mouseWheelMove(MouseWheelEvent e){
 	if(ctrlDown){
 		//System.out.println(e.getWheelRotation());
   if(e.getWheelRotation()==1){ //zoomout
-			if(scale>.25){
-				scale-=.25f;
-				grid.generateGrid();
-			    camera.orient(centerX, centerY);
-			}else if(scale<=.25 &&scale >0.1 ){
-			//	scale-=.05f;
-				//grid.generateGrid();
+	 
+				 
+				Tabbar.onScaleChange(-0.25f);
 				
-			}
+			//	grid.generateGrid();
+						
 		}
 	if(e.getWheelRotation()==-1){ //zoomin
-		if(scale<10){
-			scale+=.25f;
-			grid.generateGrid();
-		    camera.orient(centerX, centerY);
-		}
+ 
+			Tabbar.onScaleChange(0.25f);
+ 
+		//	grid.generateGrid();
+		   // camera.orient(centerX, centerY);
+	 
 			
 		}
 	}
