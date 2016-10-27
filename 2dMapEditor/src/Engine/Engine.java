@@ -104,6 +104,7 @@ public static void resize(GLAutoDrawable drawable,int x,int y, int width,int hei
     camera.orient(centerX, centerY);
 
   spriteRenderer.Resize(gl, width, height);
+  Tabbar.Resize(width, height);
     
     // grid.resize(width, height);
   System.out.println("Total Sprites: "+sprites.size());
