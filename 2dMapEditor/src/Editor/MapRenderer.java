@@ -40,5 +40,10 @@ public MapRenderer(int width,int height) {
 		map.onScaleChange(scale);
 		
 	}
+	@Override
+	public void cameraDragged(float mouseX, float mouseY) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

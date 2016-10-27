@@ -1,8 +1,11 @@
 package Editor;
 
+import java.awt.Font;
 import java.util.ArrayList;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.util.awt.TextRenderer;
 
 import Engine.Engine;
 
@@ -11,9 +14,10 @@ public class Tabbar {
 	public static Tab activeTab=null;
 	public final static float height=32;
 	public static float width=0,x,y;
-	public static void Draw(GL2 gl){
-		//draw tab bar
-
+	public static TextRenderer textRenderer;
+	public static void Draw(GLAutoDrawable drawable){
+		
+		GL2 gl = drawable.getGL().getGL2();
 		
 		
 	  if(activeTab!=null){	  
@@ -28,22 +32,37 @@ public class Tabbar {
 			
 			  float tabwidth = width/tabs.size();
 		      float sx = Engine.spriteFrame.width;
-		      gl.glColor3f(.25f, .25f, .25f);
+		
 			  for(Tab tab :tabs){
-				  Engine.spriteRenderer.Draw(gl, sx, 0, tabwidth, 30, 0, 0, 0, 0);
+				  if(tab == activeTab){
+					  gl.glColor3f(0.5f, 0.5f, 0.5f);
+				  }else{
+					  gl.glColor3f(.25f, .25f, .25f);
 				  
+				  }Engine.spriteRenderer.Draw(gl, sx, 0, tabwidth, 30, 0, 0, 0, 0);
+					
+				  gl.glUseProgram(0);
+				 textRenderer.beginRendering(drawable.getSurfaceWidth(), drawable.getSurfaceHeight());
+				 textRenderer.setColor(1,1,1,0.8f);
+				 textRenderer.draw(tab.getName(), (int) sx, drawable.getSurfaceHeight()-24);
+				 textRenderer.endRendering();
+			
+			
 				  sx+=tabwidth+10;
 			  }
 			  
 			  
 			  
-			  Engine.spriteRenderer.toggleUseTexture();
+			//  Engine.spriteRenderer.toggleUseTexture();
 		  }
+		  gl.glUseProgram(Engine.spriteRenderer.shaderProgram.id());
+		  Engine.spriteRenderer.setUseTexture(true);
 		
 	
 	}
 	public static void init(){
 		tabs= new ArrayList<>();
+		textRenderer = new TextRenderer(new Font("SansSerif",Font.BOLD,24));
 	}
 	public static void Resize(float width,float height){
 		Tabbar.width=width-Engine.spriteFrame.width;
@@ -75,12 +94,19 @@ public class Tabbar {
 	
 	public static void addTab(Tab tab){
 		tabs.add(tab);
+		tab.setName("Untitled-"+tabs.size());
 		activeTab=tab;
 		
 	}
 	public static void onScaleChange(float change){
 		if(activeTab!=null){
 			activeTab.onScaleChange(change);
+		}
+	}
+	
+	public static void onCameraDragged(float mouseX,float mouseY){
+		if(activeTab!=null){
+			activeTab.cameraDragged(mouseX, mouseY);
 		}
 	}
 

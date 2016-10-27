@@ -29,5 +29,5 @@ public Tab(){
 	 public  void Resize(float width,float height){
 		 cam.resize(width, height);
 	 }
-	
+	public abstract void cameraDragged(float mouseX,float mouseY);
 }

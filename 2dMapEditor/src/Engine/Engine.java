@@ -134,7 +134,7 @@ public static void Render(GLAutoDrawable drawable){
     */	
 
   
-Tabbar.Draw(gl);
+Tabbar.Draw(drawable);
   if(drawGrid){
     
   //. grid.Draw(gl);
@@ -322,13 +322,16 @@ public static void mouseWheelMove(MouseWheelEvent e){
 }
 public static void mouseDragged(MouseEvent e) {
 	spriteFrame.sliderDrag((float)e.getX(),(float)e.getY());
+	Tabbar.Resize(width, height);
 	if(cameraDragged){
-		float cx = (e.getX()-camDragx)*(1.5f/scale);
+		
+		/*float cx = (e.getX()-camDragx)*(1.5f/scale);
 		camDragx=e.getX();
 		float cy = (e.getY() - camDragy)*(1.5f/scale);
 		camDragy=e.getY();
 		camera.move(camera.getX()-cx, camera.getY()-cy);
 		grid.generateGrid();
+		*/
 	 
 		//}
 	}

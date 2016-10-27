@@ -61,6 +61,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.Animator;
 
 import Editor.MapRenderer;
+import Editor.PropRenderer;
 import Editor.Tabbar;
 import Engine.Engine;
 import Engine.SizedMap;
@@ -136,7 +137,18 @@ public class Window extends JFrame{
   		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			JTextField mwidth = new JTextField();
+			mwidth.setText("2");
+			JTextField mheight = new JTextField();
+			mheight.setText("2");
+			final JComponent[] inputs = new JComponent[]{
+				new JLabel("Prop Width"), mwidth,
+				new JLabel("prop Height"),mheight
+			};
+			int result = JOptionPane.showConfirmDialog(null, inputs, "New Prop", JOptionPane.PLAIN_MESSAGE);
 			
+			
+			Tabbar.addTab(new PropRenderer());
 		}
 	});
       fileMenu.addSeparator();
