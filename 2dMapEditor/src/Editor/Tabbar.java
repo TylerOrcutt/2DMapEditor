@@ -8,13 +8,20 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 import Engine.Engine;
+import Engine.Grid;
 
 public class Tabbar {
+	public static Grid grid;
 	public static ArrayList<Tab> tabs;
 	public static Tab activeTab=null;
 	public final static float height=32;
 	public static float width=0,x,y;
 	public static TextRenderer textRenderer;
+	public static void init(){
+		tabs= new ArrayList<>();
+		textRenderer = new TextRenderer(new Font("SansSerif",Font.BOLD,24));
+		grid = new Grid();
+	}
 	public static void Draw(GLAutoDrawable drawable){
 		
 		GL2 gl = drawable.getGL().getGL2();
@@ -23,7 +30,10 @@ public class Tabbar {
 	  if(activeTab!=null){	  
 	  //draw active tab 
 	   activeTab.Draw(gl);
-	  }
+	   if(Engine.drawGrid){
+	   grid.Draw(gl, (MapRenderer)activeTab);
+	   }
+	   }
 
 		  if(tabs.size()>1){
 			  Engine.spriteRenderer.toggleUseTexture();
@@ -60,10 +70,7 @@ public class Tabbar {
 		
 	
 	}
-	public static void init(){
-		tabs= new ArrayList<>();
-		textRenderer = new TextRenderer(new Font("SansSerif",Font.BOLD,24));
-	}
+
 	public static void Resize(float width,float height){
 		Tabbar.width=width-Engine.spriteFrame.width;
 		for(int i=0;i<tabs.size();i++){
@@ -81,6 +88,7 @@ public class Tabbar {
 		
 			if(sel>=0 && sel<tabs.size()){
 				activeTab= tabs.get(sel);
+				grid.generateGrid((MapRenderer)activeTab);
 			}
 			return true;
 		}
@@ -96,11 +104,12 @@ public class Tabbar {
 		tabs.add(tab);
 		tab.setName("Untitled-"+tabs.size());
 		activeTab=tab;
-		
+		grid.generateGrid((MapRenderer)activeTab);
 	}
 	public static void onScaleChange(float change){
 		if(activeTab!=null){
 			activeTab.onScaleChange(change);
+			grid.generateGrid((MapRenderer)activeTab);
 		}
 	}
 	
@@ -109,5 +118,9 @@ public class Tabbar {
 			activeTab.cameraDragged(mouseX, mouseY);
 		}
 	}
-
+	public static void onCameraDragStart(float mouseX,float mouseY){
+		if(activeTab!=null){
+			activeTab.onCameraDragStart(mouseX, mouseY);
+		}
+	}
 }

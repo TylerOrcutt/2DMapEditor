@@ -32,7 +32,7 @@ public class SpriteFrame {
 			return;
 		}
 		width=x;
-		 Engine.grid.generateGrid();
+		// Engine.grid.generateGrid();
 	}
  
 	 

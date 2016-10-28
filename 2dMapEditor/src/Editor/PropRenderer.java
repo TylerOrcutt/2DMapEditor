@@ -28,10 +28,6 @@ public class PropRenderer extends Tab{
 		
 	}
 
-	@Override
-	public void cameraDragged(float mouseX, float mouseY) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 }

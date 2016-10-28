@@ -64,7 +64,7 @@ import Editor.MapRenderer;
 import Editor.PropRenderer;
 import Editor.Tabbar;
 import Engine.Engine;
-import Engine.SizedMap;
+ 
 import Engine.SpriteRenderer;
 import Props.PropWindow;
 import Shaders.ShaderProgram;
@@ -100,7 +100,7 @@ public class Window extends JFrame{
 			// TODO Auto-generated method stub
 			Engine.sprites.clear();
 			Engine.useSizedMap=false;
-			Engine.sizedMap=null;
+		//	Engine.sizedMap=null;
 		
 			
 		}

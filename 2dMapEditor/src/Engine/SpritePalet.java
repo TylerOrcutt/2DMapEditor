@@ -4,13 +4,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import com.jogamp.opengl.GL2;
-   class selection {
-		float selectionX=0,selectionY=0;
-		public selection(float x,float y){
-			selectionX=x;
-		    selectionY=y;
-		}
-}
+
+import Tools.selection;
+
 public class SpritePalet {
 	private SpriteSheet sheet;
 

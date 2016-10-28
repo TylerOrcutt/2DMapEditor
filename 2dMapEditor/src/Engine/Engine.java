@@ -22,6 +22,7 @@ import Camera.Camera;
 import Editor.SpriteFrame;
 import Editor.Tabbar;
 import Shaders.ShaderProgram;
+import Tools.selection;
 
 
 public class Engine {
@@ -46,7 +47,7 @@ public class Engine {
   public static SpriteFrame spriteFrame;
   public static boolean shiftDown=false;
   public static boolean useSizedMap=false;
-  public static SizedMap sizedMap;
+ 
   public static boolean cameraDragged=false;
   public static float camDragx=0,camDragy=0;
   public static boolean initEngine() {
@@ -277,8 +278,9 @@ public static void MousePress(MouseEvent e){
 	
 	if(e.getButton()==2 && e.getX()>spriteFrame.width){
 		cameraDragged=true;
-		camDragx = e.getX();
-		camDragy=e.getY();
+		//camDragx = e.getX();
+	//	camDragy=e.getY();
+		Tabbar.onCameraDragStart(e.getX(),e.getY());
 	}
 }
 public static void MouseRelease(MouseEvent e){
@@ -324,7 +326,7 @@ public static void mouseDragged(MouseEvent e) {
 	spriteFrame.sliderDrag((float)e.getX(),(float)e.getY());
 	Tabbar.Resize(width, height);
 	if(cameraDragged){
-		
+		Tabbar.onCameraDragged(e.getX(),e.getY());
 		/*float cx = (e.getX()-camDragx)*(1.5f/scale);
 		camDragx=e.getX();
 		float cy = (e.getY() - camDragy)*(1.5f/scale);

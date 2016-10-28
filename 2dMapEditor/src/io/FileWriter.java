@@ -38,7 +38,7 @@ public class FileWriter {
 		
 			}
 			}else{
-				pr.print(Engine.sizedMap.generateJSON());
+	//			pr.print(Engine.sizedMap.generateJSON());
 			}
 			pr.print("}");
 			pr.close();
