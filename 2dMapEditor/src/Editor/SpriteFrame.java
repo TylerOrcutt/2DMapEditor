@@ -16,7 +16,17 @@ public class SpriteFrame {
 		
 	}
 	public void Draw(GL2 gl){
+		if(!Engine.drawProps){
 		sp.Draw(gl);
+		
+		}else{
+		float posy=0;
+			for(int i=0;i<Engine.props.size();i++){
+			   Engine.props.get(i).Draw(gl,50,posy);
+			   posy+=Engine.props.get(i).getHeight()*32+10;
+			   
+			}
+		}
 		Engine.spriteRenderer.setUseTexture(false);
 		   gl.glColor4f(.75f,.75f,.75f,10.f);
 		      Engine.spriteRenderer.Draw(gl, width-(5/2.0f), 0,5,  Engine.height,0,0,0,0);//top

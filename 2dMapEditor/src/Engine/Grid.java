@@ -17,7 +17,7 @@ public Grid(){
  lines = new ArrayList<>();
 }
 
-public void Draw(GL2 gl,MapRenderer tab){
+public void Draw(GL2 gl,Tab tab){
 	//gl.glColor4f(.44f, .44f, .44f, .50f);
 	gl.glColor4f(1.f, 0.f, 0.f, 1f);
 	//SpriteRenderer.setUseTexture(false);
@@ -52,7 +52,7 @@ public void Draw(GL2 gl,MapRenderer tab){
  
 }
 
-public void generateGrid(MapRenderer tab){
+public void generateGrid(Tab tab){
 	lines.clear();
 	float offset=0;
  

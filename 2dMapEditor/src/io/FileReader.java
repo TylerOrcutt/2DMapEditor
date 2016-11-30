@@ -20,6 +20,7 @@ public class FileReader {
 		data+=line;
 		}
 		System.out.println(data);
+		//JsonObject
 		
 		
 		}catch(Exception e){

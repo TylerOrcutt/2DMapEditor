@@ -31,7 +31,7 @@ public class Tabbar {
 	  //draw active tab 
 	   activeTab.Draw(gl);
 	   if(Engine.drawGrid){
-	   grid.Draw(gl, (MapRenderer)activeTab);
+	   grid.Draw(gl, activeTab);
 	   }
 	   }
 
@@ -88,7 +88,7 @@ public class Tabbar {
 		
 			if(sel>=0 && sel<tabs.size()){
 				activeTab= tabs.get(sel);
-				grid.generateGrid((MapRenderer)activeTab);
+				grid.generateGrid( activeTab);
 			}
 			return true;
 		}
@@ -104,12 +104,12 @@ public class Tabbar {
 		tabs.add(tab);
 		tab.setName("Untitled-"+tabs.size());
 		activeTab=tab;
-		grid.generateGrid((MapRenderer)activeTab);
+		grid.generateGrid( activeTab);
 	}
 	public static void onScaleChange(float change){
 		if(activeTab!=null){
 			activeTab.onScaleChange(change);
-			grid.generateGrid((MapRenderer)activeTab);
+			grid.generateGrid( activeTab);
 		}
 	}
 	
@@ -121,6 +121,17 @@ public class Tabbar {
 	public static void onCameraDragStart(float mouseX,float mouseY){
 		if(activeTab!=null){
 			activeTab.onCameraDragStart(mouseX, mouseY);
+		}
+	}
+	
+	public static void onMouseDrag(int button, float x,float y){
+		if(activeTab!=null){
+			activeTab.onMouseDragged(button, x, y);
+		}
+	}
+	public static void onMouseRelease(int button, float x,float y){
+		if(activeTab!=null){
+			activeTab.onMouseRelease(button, x, y);
 		}
 	}
 }

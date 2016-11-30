@@ -21,6 +21,7 @@ import com.jogamp.opengl.util.glsl.ShaderCode;
 import Camera.Camera;
 import Editor.SpriteFrame;
 import Editor.Tabbar;
+import Props.Prop;
 import Shaders.ShaderProgram;
 import Tools.selection;
 
@@ -50,15 +51,20 @@ public class Engine {
  
   public static boolean cameraDragged=false;
   public static float camDragx=0,camDragy=0;
+  
+  public static boolean drawProps=false;
+
+  public static ArrayList<Prop> props;
+	 
   public static boolean initEngine() {
 
   sprites  = new ArrayList<Sprite>();
   sp = new ArrayList<>();
+  props= new ArrayList<>();
   grid= new Grid();   
 		
   camera = new Camera();
   
-	 
 	 
 	return true;
 }
@@ -298,6 +304,8 @@ public static void MouseRelease(MouseEvent e){
 		cameraDragged=false;
 	}
 	spriteFrame.sliderDragged=false;
+	
+	Tabbar.onMouseRelease(e.getButton(), e.getX(), e.getY());
 }
 public static void mouseWheelMove(MouseWheelEvent e){
 	if(ctrlDown){
@@ -337,6 +345,7 @@ public static void mouseDragged(MouseEvent e) {
 	 
 		//}
 	}
+	Tabbar.onMouseDrag(e.getButton(), e.getX(), e.getY());
 }
 public static boolean mouseMoved(MouseEvent e) {
 	if(e.getX()>=spriteFrame.width-5  && e.getX()<=spriteFrame.width+5 ){

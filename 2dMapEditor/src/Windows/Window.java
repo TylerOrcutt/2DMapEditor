@@ -3,9 +3,14 @@ package Windows;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Canvas;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -81,7 +86,7 @@ public class Window extends JFrame{
 		
  
 		this.setSize(800,600);
-	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	 this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setTitle(title);
     JMenuBar menubar = new JMenuBar( );
       JMenu fileMenu = new JMenu("File");
@@ -148,7 +153,7 @@ public class Window extends JFrame{
 			int result = JOptionPane.showConfirmDialog(null, inputs, "New Prop", JOptionPane.PLAIN_MESSAGE);
 			
 			
-			Tabbar.addTab(new PropRenderer());
+			Tabbar.addTab(new PropRenderer(Integer.parseInt(mwidth.getText()),Integer.parseInt(mheight.getText())));
 		}
 	});
       fileMenu.addSeparator();
@@ -208,17 +213,41 @@ public class Window extends JFrame{
       
       fileMenu = new JMenu("View");
       JCheckBoxMenuItem gridcheck =new JCheckBoxMenuItem("Show Grid",true);
+      JCheckBoxMenuItem propCheck =new JCheckBoxMenuItem("Properties Window",true);
       fileMenu.add(gridcheck);
+      fileMenu.add(propCheck);
       fileMenu.addSeparator();
       
-      fileMenu.add(new JMenuItem("Props"));
-      fileMenu.add(new JMenuItem("TileSheet"));
+      JMenuItem propsItem = new JMenuItem("Props");
+      JMenuItem tsItem = new JMenuItem("TileSheet");
+      
+      fileMenu.add(propsItem);
+      fileMenu.add(tsItem);
+      propsItem.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Engine.drawProps=true;
+		}
+	});
+      tsItem.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Engine.drawProps=false;
+		}
+	});
+      
+      
+      
       JMenu statusm = new JMenu();
       statusm.add(new JMenuItem("Exit"));
       this.add(statusm,BorderLayout.SOUTH);
  
     
-      
+ 
       gridcheck.addActionListener(new ActionListener() {
 		
 		@Override
@@ -232,7 +261,7 @@ public class Window extends JFrame{
       
 
       
-    this.setJMenuBar(menubar);
+     this.setJMenuBar(menubar);
 
     JToolBar toolbar = new JToolBar();
     JButton btn = new JButton("");
@@ -368,13 +397,34 @@ testbtn.addActionListener(new ActionListener() {
      
  
      JPanel leftp = new JPanel(new BorderLayout());
+          
+     //
+     JPanel ltop = new JPanel(new GridLayout(2,4));
+     ltop.add(new JLabel("Block x  "));
+     ltop.add(new JLabel("19"));
+     ltop.add(new JLabel("Block y  "));
+     ltop.add(new JLabel("21"));
+     
+     leftp.add(ltop,BorderLayout.NORTH);
+   //  JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,canvas,leftp);
+    // this.getContentPane().add(splitpane,BorderLayout.CENTER);
+     this.getContentPane().add(leftp,BorderLayout.EAST);
+     this.getContentPane().add(canvas,BorderLayout.CENTER);
     
 
-     //JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftp,canvas);
-    // this.getContentPane().add(splitpane,BorderLayout.CENTER);
-      this.getContentPane().add(canvas,BorderLayout.CENTER);
-    ani.add(canvas);
+     ani.add(canvas);
      ani.start();
+     
+     
+     propCheck.addActionListener(new ActionListener() {
+ 		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			leftp.setVisible(!leftp.isVisible());
+			
+		}
+	});  
    //splitpane.setOneTouchExpandable(true);
    //splitpane.setDividerLocation(50);
 
