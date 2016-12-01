@@ -21,11 +21,13 @@ public class SpriteSheet {
 	    public int width,height;
 	   // int []textureids=null;
 	  public Texture texture;
+	  public String file;
 
 	    public SpriteSheet (GL2 gl, String file,int rows, int cols){
 	        sheetRows=rows;
 	        sheetCols=cols;
 	        //this.gl=gl;
+	        this.file=file;
 	      //  this.context=context;
 	        texture= loadTexture(file,gl);
 

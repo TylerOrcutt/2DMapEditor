@@ -136,6 +136,7 @@ public Tab(){
 	public abstract float getWidth();
 	public abstract float getHeight();
 	public abstract String getType();
+	public abstract String generateJSON();
 	
 }
 

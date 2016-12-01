@@ -11,6 +11,7 @@ public class Prop {
 	int width,height;
 	SpriteSheet sp;
 	Sprite [][]propData;
+	float zline=0;
 	public Prop(int width,int height){
 		this.width=width;
 		this.height = height;

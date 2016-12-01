@@ -112,6 +112,12 @@ public  PropRenderer(int width,int height) {
 		return prop.getHeight();
 	}
 
+	@Override
+	public String generateJSON() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

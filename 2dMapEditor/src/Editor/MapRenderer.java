@@ -12,21 +12,34 @@ import Props.Prop;
 import Tools.selection;
 import Engine.*;
 
+class propData{
+float x,y;
+Prop prop;
+public propData(){}
+public propData(Prop p,float x,float y){
+	this.prop=p;
+	this.x=x;
+	this.y=y;
+}
+}
 public class MapRenderer extends Tab {
 
-ArrayList<Prop> props;
+ArrayList<propData> props;
 int width, height;
 public Sprite[][] mapData;
+
 public MapRenderer( ) {
 	// TODO Auto-generated constructor stub
-	super();
- 
+	//super();
+ props = new ArrayList<>();
  
 }
 
 public MapRenderer(int width,int height) {
 	// TODO Auto-generated constructor stub
- super();
+	 
+	super();
+	props = new ArrayList<>();
  this.width=width;
  this.height = height;
 	mapData = new Sprite[width][];
@@ -71,26 +84,48 @@ public MapRenderer(int width,int height) {
 	}
 
 	public String generateJSON(){
-		String json="";
+		String json="{";
 		 json+="\"Map\":{";
 		 json+="\"width\":\""+width+"\",";
 		 json+="\"height\":\""+height+"\",";
-		 json+="}";
+		 json+="\"BlockScale\":\"32\",";
+		 json+="\"SheetCount\":\""+Engine.sp.size()+"\"";
+		 json+="},";
+		 json+="\"Blocks\":[";
 		for(int i=0;i<width;i++){
 			for(int j=0;j<height;j++){
-			 json+="\"Block\":{";
-			 json+="\"x\":\""+mapData[i][j].x+"\",";
-			 json+="\"y\":\""+mapData[i][j].y+"\",";
-			 json+="\"width\":\""+mapData[i][j].width+"\",";
-			 json+="\"height\":\""+mapData[i][j].height+"\"";
-			 json+="\"imgx\":\""+mapData[i][j].imgx+"\"";
+				json +="{";		
+			 json+="\"x\":\""+i+"\",";
+			 json+="\"y\":\""+j+"\",";
+		//	 json+="\"width\":\""+mapData[i][j].width+"\",";
+		//	 json+="\"height\":\""+mapData[i][j].height+"\",";
+			 json+="\"imgx\":\""+mapData[i][j].imgx+"\",";
 			 json+="\"imgy\":\""+mapData[i][j].imgy+"\"";
-			 json+="}";
-			 if(width+height>2 && j<height-1 && i<width-1){
+				json +="}";
+			 if(width+height>2 && j<=height-1 && i<=width-1){
 				 json+=",";
 			 }
 			}
 		}
+		json+="],";
+      ArrayList<SpriteSheet> sheets = Engine.sp;
+ 	 json+="\"SpriteSheets\":[";
+ 	 
+      for(int i=0;i<sheets.size();i++){
+    	  SpriteSheet s = sheets.get(i);
+    	 	 json+="{\"id\":\""+i+"\", \"File\":\""+s.file+"\"}";
+    	  if(i<sheets.size()-1){
+    		  json+=",";
+    	  }
+      }
+      json+="]";
+		if(props.size()>0){
+			json+=",\"Props\":[";
+			json+="]";
+		}
+      
+      
+		json +="}";
 		
 		return json;
 	}
