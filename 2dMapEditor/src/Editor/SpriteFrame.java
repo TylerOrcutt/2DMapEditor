@@ -5,9 +5,9 @@ import com.jogamp.opengl.GL2;
 import Engine.SpritePalet;
 import Engine.SpriteRenderer;
 import Engine.SpriteSheet;
-
+import Engine.Engine;
 public class SpriteFrame {
-	public float  width=620;
+	public float  width=512;
 	public SpritePalet sp;
 	 public boolean visiable=true;
 	 public boolean sliderDragged=false;
@@ -16,11 +16,21 @@ public class SpriteFrame {
 		
 	}
 	public void Draw(GL2 gl){
+		if(!Engine.drawProps){
 		sp.Draw(gl);
-		SpriteRenderer.setUseTexture(false);
+		
+		}else{
+		float posy=0;
+			for(int i=0;i<Engine.props.size();i++){
+			   Engine.props.get(i).Draw(gl,50,posy);
+			   posy+=Engine.props.get(i).getHeight()*32+10;
+			   
+			}
+		}
+		Engine.spriteRenderer.setUseTexture(false);
 		   gl.glColor4f(.75f,.75f,.75f,10.f);
-		      SpriteRenderer.Draw(gl, width-(5/2.0f), 0,5, Engine.Engine.height,0,0,0,0);//top
-		SpriteRenderer.setUseTexture(true);
+		      Engine.spriteRenderer.Draw(gl, width-(5/2.0f), 0,5,  Engine.height,0,0,0,0);//top
+		Engine.spriteRenderer.setUseTexture(true);
 		 
 	}
 	
@@ -32,7 +42,7 @@ public class SpriteFrame {
 			return;
 		}
 		width=x;
-		Engine.Engine.grid.generateGrid();
+		// Engine.grid.generateGrid();
 	}
  
 	 

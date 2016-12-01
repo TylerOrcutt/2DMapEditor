@@ -21,11 +21,13 @@ public class SpriteSheet {
 	    public int width,height;
 	   // int []textureids=null;
 	  public Texture texture;
+	  public String file;
 
 	    public SpriteSheet (GL2 gl, String file,int rows, int cols){
 	        sheetRows=rows;
 	        sheetCols=cols;
 	        //this.gl=gl;
+	        this.file=file;
 	      //  this.context=context;
 	        texture= loadTexture(file,gl);
 
@@ -60,7 +62,7 @@ public class SpriteSheet {
 	        SpriteRenderer.Draw(x,y,sx,sy);
 	    }
 	*/
-	    public void draw(GL2 gl,float x,float y,float width,float height,float imgx,float imgy ){
+	    public void draw(GL2 gl,SpriteRenderer sr,float x,float y,float width,float height,float imgx,float imgy ){
                 //txt.bind(gl);
               //  txt.getTextureObject()
 	    	if(texture!=null){
@@ -72,7 +74,7 @@ public class SpriteSheet {
 	     //   SpriteRenderer.Draw(x,y,w,h,sx,sy,getActualSpriteWidth(),getActualSpriteHeight());
                sx+=(1.0f/getTextureWidth()) ;
                
-	    	 SpriteRenderer.Draw(gl, x, y, width, height,sx,sy,getActualSpriteWidth(),getActualSpriteHeight());
+	    	 sr.Draw(gl, x, y, width, height,sx,sy,getActualSpriteWidth(),getActualSpriteHeight());
 	    }
 
 

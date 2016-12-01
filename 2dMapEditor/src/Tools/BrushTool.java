@@ -1,4 +1,4 @@
-package Editor;
+package Tools;
 
 public class BrushTool extends Tool
 {

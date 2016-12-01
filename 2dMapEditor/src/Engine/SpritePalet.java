@@ -4,13 +4,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import com.jogamp.opengl.GL2;
-   class selection {
-		float selectionX=0,selectionY=0;
-		public selection(float x,float y){
-			selectionX=x;
-		    selectionY=y;
-		}
-}
+
+import Tools.selection;
+
 public class SpritePalet {
 	private SpriteSheet sheet;
 
@@ -22,20 +18,20 @@ public class SpritePalet {
 	}
 	public void DrawSelectioNSquare(GL2 gl){
 		
-		SpriteRenderer.setUseTexture(false);
+		Engine.spriteRenderer.setUseTexture(false);
  
   float width=5;
    for(selection s : selected){
        float x = s.selectionX,y=s.selectionY;
 	   gl.glColor3f(0,0,1);
-      SpriteRenderer.Draw(gl, x-(width/2.0f), y,30, width,0,0,0,0);//top
-      SpriteRenderer.Draw(gl, x-(width/2.0f), y+30,31, width,0,0,0,0);//bottom
+      Engine.spriteRenderer.Draw(gl, x-(width/2.0f), y,30, width,0,0,0,0);//top
+      Engine.spriteRenderer.Draw(gl, x-(width/2.0f), y+30,31, width,0,0,0,0);//bottom
       
-     SpriteRenderer.Draw(gl,  x-(width/2.f), y ,width, 31,0,0,0,0);//left
-     SpriteRenderer.Draw(gl,  30+x-(width/2.f), y ,width, 32,0,0,0,0);//right
+     Engine.spriteRenderer.Draw(gl,  x-(width/2.f), y ,width, 31,0,0,0,0);//left
+     Engine.spriteRenderer.Draw(gl,  30+x-(width/2.f), y ,width, 32,0,0,0,0);//right
      // SpriteRenderer.Draw(gl, x+32, y-(width/2),width, 32,0,0,0,0);//top
    }
-		SpriteRenderer.setUseTexture(true);
+		Engine.spriteRenderer.setUseTexture(true);
 	}
 	public void Draw(GL2 gl){
 		
@@ -47,7 +43,7 @@ public class SpritePalet {
   	 }else{
   		 fwidth=sheet.width;
   	 }
-		SpriteRenderer.Draw(gl, 0, 0,fwidth, sheet.height,0,0,drawWidth,1.f);
+		Engine.spriteRenderer.Draw(gl, 0, 0,fwidth, sheet.height,0,0,drawWidth,1.f);
 		this.DrawSelectioNSquare(gl);
 
 	  

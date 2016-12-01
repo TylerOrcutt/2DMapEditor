@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import com.jogamp.opengl.GL2;
 
 import Camera.Camera;
+import Editor.MapRenderer;
+import Editor.Tab;
+import Editor.Tabbar;
 
 public class Grid {
 private ArrayList<Sprite>lines;
@@ -14,59 +17,63 @@ public Grid(){
  lines = new ArrayList<>();
 }
 
-public void Draw(GL2 gl){
+public void Draw(GL2 gl,Tab tab){
 	//gl.glColor4f(.44f, .44f, .44f, .50f);
 	gl.glColor4f(1.f, 0.f, 0.f, 1f);
 	//SpriteRenderer.setUseTexture(false);
+	   Engine.spriteRenderer.toggleUseTexture();
 	for (Sprite sprite : lines) {
-		sprite.Draw(gl,Engine.camera,Engine.scale,Engine.spriteFrame.width);
+		   float cy=(sprite.y-tab.getCamera().getY())*tab.getScale();
+		   if(Tabbar.tabs.size()>1){
+			   cy=Tabbar.height+(sprite.y-tab.getCamera().getY())*tab.getScale();
+		   }
+		   float cx = (Engine.spriteFrame.width+(sprite.x+-tab.getCamera().getX())*tab.getScale());
+		//sprite.Draw(gl,Engine.camera,Engine.scale,Engine.spriteFrame.width);
+		   float twidth=sprite.width;
+		   if(sprite.width==tab.getWidth()*32*tab.getScale() && cx<Engine.spriteFrame.width){
+			   cx=Engine.spriteFrame.width;
+			   twidth=((((tab.getWidth()*32)-tab.getCamera().getX())*tab.getScale())) ;
+			  
+		   }
+ 
+		   if(twidth<0){
+			   continue;
+		   }
+		   
+		   if(cx<Engine.spriteFrame.width){
+			   continue;
+		   }
+		   
+	
+		   Engine.spriteRenderer.Draw(gl, cx, cy, twidth, sprite.height, 0, 0,0,0);
+		
 	}
-	//SpriteRenderer.setUseTexture(true);
+	   Engine.spriteRenderer.toggleUseTexture();
+ 
 }
-public void generateGrid(){
-	generateGrid(Engine.width, Engine.height, Engine.scale);
-}
-public void generateGrid(float width,float height,float scale){
+
+public void generateGrid(Tab tab){
 	lines.clear();
 	float offset=0;
-	if(Engine.spriteFrame.visiable){
-	//	offset=Engine.spriteFrame.width;
-	}
-	if(Engine.sizedMap==null){
-		return;
-	}
-	width=Engine.sizedMap.width*32;
-	height=Engine.sizedMap.height*32;
-	for(float i=(32);i<=width;i+=32){
+ 
+	
+	float width=tab.getWidth()*32*tab.getScale();
+	float height=tab.getHeight()*32*tab.getScale();
+	for(float i=(32);i<=width/tab.getScale();i+=32){
 		Sprite sprite= new Sprite(null);
 		sprite.resize(1, height);
 		sprite.move(i-0.5f, 0);
 		lines.add(sprite);
 	}
-	for(float i=0;i<=height;i+=32){
+	for(float i=0;i<=height/tab.getScale();i+=32){
 		Sprite sprite= new Sprite(null);
 		sprite.resize(width-offset, 1);
 		sprite.move(offset, i-0.5f);
 		lines.add(sprite);
 	}
-	
-/*	if(Engine.sizedMap!=null){
-		for(float i=0-Engine.camera.getX();i<=0-Engine.camera.getX()+Engine.sizedMap.width;i+=32*scale){
-			Sprite sprite= new Sprite(null);
-			sprite.resize(1, height);
-			sprite.move(offset+(i-Engine.camera.getX())-0.5f, 0);
-			lines.add(sprite);
-		}
-		for(int i=(int) (0-Engine.camera.getY());i<=0-Engine.camera.getY()+Engine.sizedMap.height;i+=32*scale){
-			Sprite sprite= new Sprite(null);
-			sprite.resize(width-offset, 1);
-			sprite.move(offset, i-0.5f);
-			lines.add(sprite);
-		}
-	}*/
-	
+		
 }
 public void resize(float width,float height){
- generateGrid();
+ 
 }
 }

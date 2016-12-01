@@ -1,11 +1,16 @@
-package Editor;
+package Windows;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Canvas;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,9 +65,13 @@ import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.Animator;
 
+import Editor.MapRenderer;
+import Editor.PropRenderer;
+import Editor.Tabbar;
 import Engine.Engine;
-import Engine.SizedMap;
+ 
 import Engine.SpriteRenderer;
+import Props.PropWindow;
 import Shaders.ShaderProgram;
 import io.FileWriter;
 
@@ -77,7 +86,7 @@ public class Window extends JFrame{
 		
  
 		this.setSize(800,600);
-	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	 this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setTitle(title);
     JMenuBar menubar = new JMenuBar( );
       JMenu fileMenu = new JMenu("File");
@@ -96,7 +105,8 @@ public class Window extends JFrame{
 			// TODO Auto-generated method stub
 			Engine.sprites.clear();
 			Engine.useSizedMap=false;
-			Engine.sizedMap=null;
+		//	Engine.sizedMap=null;
+		
 			
 		}
 	});
@@ -118,9 +128,32 @@ public class Window extends JFrame{
 				new JLabel("Map Height"),mheight
 			};
 			int result = JOptionPane.showConfirmDialog(null, inputs, "New Map", JOptionPane.PLAIN_MESSAGE);
-
-			Engine.sizedMap = new SizedMap(Integer.parseInt(mwidth.getText()),Integer.parseInt(mheight.getText()));
 			
+			
+			Tabbar.addTab(new MapRenderer(Integer.parseInt(mwidth.getText()),Integer.parseInt(mheight.getText())));
+			//Engine.sizedMap = new SizedMap(Integer.parseInt(mwidth.getText()),Integer.parseInt(mheight.getText()));
+			//Engine.grid.generateGrid();
+		}
+	});
+      
+      JMenuItem pemi = new JMenuItem("Prop");
+       newMenu.add(pemi);
+      pemi.addActionListener(new ActionListener() {
+  		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JTextField mwidth = new JTextField();
+			mwidth.setText("2");
+			JTextField mheight = new JTextField();
+			mheight.setText("2");
+			final JComponent[] inputs = new JComponent[]{
+				new JLabel("Prop Width"), mwidth,
+				new JLabel("prop Height"),mheight
+			};
+			int result = JOptionPane.showConfirmDialog(null, inputs, "New Prop", JOptionPane.PLAIN_MESSAGE);
+			
+			
+			Tabbar.addTab(new PropRenderer(Integer.parseInt(mwidth.getText()),Integer.parseInt(mheight.getText())));
 		}
 	});
       fileMenu.addSeparator();
@@ -137,7 +170,7 @@ public class Window extends JFrame{
 			int rp= fc.showOpenDialog(null);
 			 if(rp == JFileChooser.APPROVE_OPTION){
 				 System.out.println("approved");
-				 String data=io.FileReader.ReadFile(fc.getSelectedFile().getPath());
+				 String data=io.FileReader.ReadMap(fc.getSelectedFile().getPath());
 			 }else{
 				 System.out.println("Filed chooser canceled");
 			 }
@@ -171,12 +204,42 @@ public class Window extends JFrame{
       fileMenu.addSeparator();
       
  
-      fileMenu.addSeparator();
+ //     fileMenu.addSeparator();
       fileMenu.add(new JMenuItem("Exit"));
+      fileMenu = new JMenu("Edit");
+      JCheckBoxMenuItem snapCheck =new JCheckBoxMenuItem("Snap to Grid",true);
+      fileMenu.add(snapCheck);
+      menubar.add(fileMenu);
       
       fileMenu = new JMenu("View");
       JCheckBoxMenuItem gridcheck =new JCheckBoxMenuItem("Show Grid",true);
+      JCheckBoxMenuItem propCheck =new JCheckBoxMenuItem("Properties Window",true);
       fileMenu.add(gridcheck);
+      fileMenu.add(propCheck);
+      fileMenu.addSeparator();
+      
+      JMenuItem propsItem = new JMenuItem("Props");
+      JMenuItem tsItem = new JMenuItem("TileSheet");
+      
+      fileMenu.add(propsItem);
+      fileMenu.add(tsItem);
+      propsItem.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Engine.drawProps=true;
+		}
+	});
+      tsItem.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Engine.drawProps=false;
+		}
+	});
+      
       
       
       JMenu statusm = new JMenu();
@@ -184,7 +247,7 @@ public class Window extends JFrame{
       this.add(statusm,BorderLayout.SOUTH);
  
     
-      
+ 
       gridcheck.addActionListener(new ActionListener() {
 		
 		@Override
@@ -196,7 +259,9 @@ public class Window extends JFrame{
       menubar.add(fileMenu);
  
       
-    this.setJMenuBar(menubar);
+
+      
+     this.setJMenuBar(menubar);
 
     JToolBar toolbar = new JToolBar();
     JButton btn = new JButton("");
@@ -297,6 +362,7 @@ testbtn.addActionListener(new ActionListener() {
  
   final Animator ani = new Animator();
    ani.setUpdateFPSFrames(60, null);
+
     
      canvas.addGLEventListener(new GLEventListener() {
 		
@@ -328,15 +394,37 @@ testbtn.addActionListener(new ActionListener() {
 		}
 	});
      
+     
  
      JPanel leftp = new JPanel(new BorderLayout());
+          
+     //
+     JPanel ltop = new JPanel(new GridLayout(2,4));
+     ltop.add(new JLabel("Block x  "));
+     ltop.add(new JLabel("19"));
+     ltop.add(new JLabel("Block y  "));
+     ltop.add(new JLabel("21"));
+     
+     leftp.add(ltop,BorderLayout.NORTH);
+   //  JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,canvas,leftp);
+    // this.getContentPane().add(splitpane,BorderLayout.CENTER);
+     this.getContentPane().add(leftp,BorderLayout.EAST);
+     this.getContentPane().add(canvas,BorderLayout.CENTER);
     
 
-     //JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftp,canvas);
-    // this.getContentPane().add(splitpane,BorderLayout.CENTER);
-      this.getContentPane().add(canvas,BorderLayout.CENTER);
-    ani.add(canvas);
+     ani.add(canvas);
      ani.start();
+     
+     
+     propCheck.addActionListener(new ActionListener() {
+ 		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			leftp.setVisible(!leftp.isVisible());
+			
+		}
+	});  
    //splitpane.setOneTouchExpandable(true);
    //splitpane.setDividerLocation(50);
 
