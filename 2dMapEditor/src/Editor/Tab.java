@@ -61,8 +61,8 @@ public Tab(){
 			y/=32;
 					
 		}
-		for(int i=(int)(x);i<data.length && (i*32)<= cam.getWidth();i++){
-			for(int j=(int)(y);j<data[i].length && (j*32) <=cam.getHeight();j++){
+		for(int i=(int)(x);i<data.length ;i++){
+			for(int j=(int)(y);j<data[i].length;j++){
 				data[i][j].x = ((i*(32)) );
 				data[i][j].y = (j*(32)) ;
 				if(Tabbar.tabs.size()>1){

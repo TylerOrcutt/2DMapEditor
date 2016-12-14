@@ -102,6 +102,7 @@ public class Tabbar {
 	
 	public static void addTab(Tab tab){
 		tabs.add(tab);
+		tab.Resize(Engine.camera.getWidth(),Engine.camera.getHeight());
 		tab.setName("Untitled-"+tabs.size());
 		activeTab=tab;
 		grid.generateGrid( activeTab);

@@ -31,7 +31,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.ImageIcon;
@@ -83,8 +85,8 @@ public class Window extends JFrame{
  
 	public Window(String title){
  
-		
- 
+ final String wtitle= title;		
+  final Window win = this;
 		this.setSize(800,600);
 	 this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setTitle(title);
@@ -96,7 +98,45 @@ public class Window extends JFrame{
       
       JMenu newMenu = new JMenu("New");
       fileMenu.add(newMenu);
-      JMenuItem mapmi = new JMenuItem("Map");
+      
+      JMenuItem mapmi = new JMenuItem("Project");
+     // newMenu.add(mapmi);
+      mapmi.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Engine.sprites.clear();
+			Engine.useSizedMap=false;
+			Tabbar.tabs.clear();
+		
+			JFileChooser chooser = new JFileChooser();
+			chooser.setCurrentDirectory(new File("."));
+			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			if(chooser.showOpenDialog(null)== JFileChooser.APPROVE_OPTION){
+				win.setTitle(wtitle + " Project1");
+				
+				Engine.projectPath = chooser.getSelectedFile().toString();
+				System.out.println(Engine.projectPath);
+				new File(Engine.projectPath+"/Props").mkdir();
+				new File(Engine.projectPath+"/Images").mkdir();
+				new File(Engine.projectPath+"/Maps").mkdir();
+				try{
+				PrintWriter p = new PrintWriter(Engine.projectPath+"/project1.pep");
+			//	p.write("");
+				p.close();
+				}catch(Exception ee){}
+			}
+			
+		//	Engine.sizedMap=null;
+		
+			
+		}
+	});
+      
+      
+      newMenu.add(mapmi);
+      mapmi = new JMenuItem("Map");
      // newMenu.add(mapmi);
       mapmi.addActionListener(new ActionListener() {
 		
@@ -189,6 +229,17 @@ public class Window extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
+			if(Engine.projectPath !=null){
+				 if(Tabbar.activeTab.getType()=="map"){
+				 FileWriter.writeFile(Engine.projectPath+"/Maps/test.map");
+				 }else{
+					 FileWriter.writeFile(Engine.projectPath+"/Props/test.prop");
+					 	 
+				 }
+				 return;
+				 }
+			
 			int rp= fc.showOpenDialog(null);
 			 if(rp == JFileChooser.APPROVE_OPTION){
 				 System.out.println("approved");
@@ -338,7 +389,7 @@ public class Window extends JFrame{
   
     JButton testbtn = new JButton("Run");
     toolbar.add(testbtn);	
-    final Window win = this;
+ 
    	Engine.initEngine( );
 testbtn.addActionListener(new ActionListener() {
 

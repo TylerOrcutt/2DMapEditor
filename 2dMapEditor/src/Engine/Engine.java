@@ -1,5 +1,6 @@
 package Engine;
 
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -16,6 +17,7 @@ import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.glsl.ShaderCode;
 
 import Camera.Camera;
@@ -34,6 +36,7 @@ public class Engine {
   public static ArrayList<SpriteSheet> sp;
   public static Sprite sprite;
  
+  public static String projectPath=null;
   public static Camera camera;
   public static ArrayList<Sprite> sprites;
   public static Grid grid;
@@ -53,8 +56,11 @@ public class Engine {
   public static float camDragx=0,camDragy=0;
   
   public static boolean drawProps=false;
-
+	public static TextRenderer textRenderer;
   public static ArrayList<Prop> props;
+  public static int fps=0;
+  public static long lastFpsUpdate=0;
+  public static int fpsCounter=0;
 	 
   public static boolean initEngine() {
 
@@ -87,8 +93,10 @@ public class Engine {
 			     gl.glClearDepth(1.0f); 
 			     gl.glClearColor(0, 0, 0, 1);
 				    sp.add( new SpriteSheet(gl,"images/sp2.png", 20, 15)); 
+					textRenderer = new TextRenderer(new Font("SansSerif",Font.BOLD,16));
 				    spriteFrame = new SpriteFrame(sp.get(0));  
 				    Tabbar.init();
+				    lastFpsUpdate = System.currentTimeMillis();
   }
   }
  
@@ -123,31 +131,21 @@ public static void Render(GLAutoDrawable drawable){
 	//System.out.println("Draw");
 	 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); 
   spriteFrame.Draw(gl);
- /* if(!useSizedMap){
-	  
-	  
-    for (Sprite sprite : sprites) {
-    	if( sprite.x-camera.getX() >=0){
-		sprite.Draw(gl, spriteRenderer,camera,scale,spriteFrame.width);
-    	}
-    	}
-  }else{
-	  if(sizedMap!=null){
-		  sizedMap.Draw(gl,camera,spriteFrame.width);
-	  }
-  }
-  
-  
-    */	
-
-  
-Tabbar.Draw(drawable);
-  if(drawGrid){
-    
-  //. grid.Draw(gl);
-    }
-
+ Tabbar.Draw(drawable);
  
+ fpsCounter++;
+ if(System.currentTimeMillis() - lastFpsUpdate>=1000 ){
+	 fps=fpsCounter;
+	 fpsCounter=0;
+	 lastFpsUpdate = System.currentTimeMillis();
+ }
+ gl.glUseProgram(0);
+ 
+textRenderer.beginRendering(drawable.getSurfaceWidth(), drawable.getSurfaceHeight());
+textRenderer.setColor(0,1,0,1.0f);
+textRenderer.draw("FPS: " + fps,  (int) (camera.getWidth()-100), 40);
+ textRenderer.endRendering();
+ gl.glUseProgram(spriteRenderer.shaderProgram.id());
 }
 public static void KeyPress(KeyEvent e){
 	if(e.isControlDown()){
