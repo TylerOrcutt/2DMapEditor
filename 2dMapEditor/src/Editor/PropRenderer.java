@@ -1,23 +1,34 @@
 package Editor;
 
+import java.util.ArrayList;
+
 import com.jogamp.opengl.GL2;
 
 import Engine.SpriteRenderer;
+import Engine.SpriteSheet;
 import Props.Prop;
 import Engine.Engine;
+import Engine.Sprite;
 public class PropRenderer extends Tab{
 float depthy=0;
 float startDragY=0;
 boolean dragDepthBar=false;
 Prop prop;
+ 
 public  PropRenderer(int width,int height) {
 		// TODO Auto-generated constructor stub
 
 	    super(width,height);
 	    prop = new Prop(width,height);
 	    Engine.props.add(prop);
+	    
 }
+public  PropRenderer(Prop p) {
+super(p.getWidth(),p.getHeight());
+	this.prop=p;
+	Engine.props.add(p);
 	
+}
 	@Override
 	public void Draw(GL2 gl) {
 		// TODO Auto-generated method stub
@@ -41,8 +52,17 @@ public  PropRenderer(int width,int height) {
 		if(Tabbar.tabs.size()>1){
 			y+=Tabbar.height;
 		}*/
+		// System.out.println("Got mouse click");
+		float tempy=y;
 		 if(button==1){
-		if(y>=depthy-10 && y<= depthy+15){
+			 y+=super.getCamera().getY();
+			 if(Tabbar.tabs.size()>1){
+				 y+=Tabbar.height;
+			 }
+					 
+		//	 x+=super.getCamera().getX();
+			 
+		if(y>=depthy-10 && y<= depthy+10){
 			startDragY=y;
 			dragDepthBar=true;
 			System.out.println("dragging bar");
@@ -50,7 +70,7 @@ public  PropRenderer(int width,int height) {
 		}}
 		 
 		//dragDepthBar=false;
-		return  onMouseClick(button, x, y,prop.getWidth(),prop.getHeight(),prop.getPropData());
+		return onMouseClick(button, x, tempy,prop.getWidth(),prop.getHeight(),prop.getPropData());
 	}
 
 	@Override
@@ -75,6 +95,7 @@ public  PropRenderer(int width,int height) {
 	@Override
 	public boolean onMouseDragged(int button, float x, float y) {
 		// TODO Auto-generated method stub
+	//	 System.out.println("Got mouse drag");
 		if(dragDepthBar){
 			y+=super.getCamera().getY();
 			if(Tabbar.tabs.size()>1){
@@ -82,8 +103,8 @@ public  PropRenderer(int width,int height) {
 			}
 			 System.out.println("DepthY:" + y);
 			depthy=y;
-			System.out.println("mouse Dragged");
-
+			//System.out.println("mouse Dragged");
+          return true;
 		}
 		return false;
 	}
@@ -91,6 +112,14 @@ public  PropRenderer(int width,int height) {
 	@Override
 	public boolean onMouseRelease(int button, float x, float y) {
 		// TODO Auto-generated method stub
+		if(dragDepthBar){
+			y+=super.getCamera().getY();
+			if(Tabbar.tabs.size()>1){
+				y+=Tabbar.height;
+			}
+			depthy=y;
+			dragDepthBar=false;
+		}
 		return false;
 	}
 
@@ -115,9 +144,55 @@ public  PropRenderer(int width,int height) {
 	@Override
 	public String generateJSON() {
 		// TODO Auto-generated method stub
-		return null;
+		float width = prop.getWidth();
+		float height = prop.getHeight();
+		Sprite[][]data = prop.getPropData();
+		String json="{";
+		 json+="\"Prop\":{";
+		 json+="\"width\":\""+prop.getWidth()+"\",";
+		 json+="\"height\":\""+prop.getHeight()+"\",";
+		 json+="\"Zbar\":\""+depthy+"\",";
+		 json+="\"BlockScale\":\"32\",";
+		 json+="\"SheetCount\":\""+Engine.sp.size()+"\"";
+		 json+="},";
+		 json+="\"Blocks\":[";
+		for(int i=0;i<width;i++){
+			for(int j=0;j<height;j++){
+				json +="{";		
+			 json+="\"x\":\""+i+"\",";
+			 json+="\"y\":\""+j+"\",";
+		//	 json+="\"width\":\""+mapData[i][j].width+"\",";
+		//	 json+="\"height\":\""+mapData[i][j].height+"\",";
+			 json+="\"imgx\":\""+data[i][j].imgx+"\",";
+			 json+="\"imgy\":\""+data[i][j].imgy+"\"";
+				json +="}";
+			 if(width+height>2 && j<=height-1 && i<=width-1){
+				 json+=",";
+			 }
+			}
+		}
+		json+="],";
+     ArrayList<SpriteSheet> sheets = Engine.sp;
+	 json+="\"SpriteSheets\":[";
+	 
+     for(int i=0;i<sheets.size();i++){
+   	  SpriteSheet s = sheets.get(i);
+   	 	 json+="{\"id\":\""+i+"\", \"File\":\""+s.file+"\"}";
+   	  if(i<sheets.size()-1){
+   		  json+=",";
+   	  }
+     }
+     json+="]";
+	 
+     
+     
+		json +="}";
+		
+		return json;
 	}
 
-
+public void setZBar(float z){
+	depthy=z;
+}
 
 }

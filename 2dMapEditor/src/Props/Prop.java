@@ -12,6 +12,12 @@ public class Prop {
 	SpriteSheet sp;
 	Sprite [][]propData;
 	float zline=0;
+	
+	public Prop(int width,int height,Sprite[][]data){
+		this.width=width;
+		this.height = height;
+		this.propData=data;
+	}
 	public Prop(int width,int height){
 		this.width=width;
 		this.height = height;
@@ -72,7 +78,12 @@ public class Prop {
 	public Sprite[][] getPropData(){
 		return propData;
 	}
-	
+	public void setZLine(float z){
+		zline = z;
+	}
+	public float getZLine(){
+		return zline;
+	}
 	
 	
 
