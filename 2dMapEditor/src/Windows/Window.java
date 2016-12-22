@@ -70,6 +70,7 @@ import com.jogamp.opengl.util.Animator;
 
 import Editor.MapRenderer;
 import Editor.PropRenderer;
+import Editor.Tab;
 import Editor.Tabbar;
 import Engine.Engine;
  
@@ -328,7 +329,22 @@ public class Window extends JFrame{
 			 }
 		}
 	});
-      
+      fileMenu.addSeparator();
+      JMenuItem cmi = new JMenuItem("Close");
+      fileMenu.add(cmi);
+      cmi.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Tab t = Tabbar.activeTab;
+			if(t!=null){
+				Tabbar.tabs.remove(t);
+			}
+		}
+	});
+      cmi = new JMenuItem("Close All");
+      fileMenu.add(cmi);
       fileMenu.addSeparator();
       
       JMenuItem smi = new JMenuItem("Save");
@@ -366,8 +382,8 @@ System.out.println(fc.getSelectedFile().getAbsolutePath());
  		}
  	});
       
-      
-      fileMenu.add(new JMenuItem("Save all"));
+      fileMenu.add(new JMenuItem("Save As..."));
+      fileMenu.add(new JMenuItem("Save All"));
       fileMenu.addSeparator();
       newMenu = new JMenu("Export");
       fileMenu.add(newMenu);

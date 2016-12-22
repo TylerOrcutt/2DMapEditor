@@ -21,15 +21,22 @@ public class SpriteFrame {
 		sp.Draw(gl);
 		
 		}else{
-		float posy=0;
+		float startx=10;
+		float posy=10;
+		float posx = 10; 
+		float tilesize=64;
 			for(int i=0;i<Engine.props.size();i++){
 			
-			   Engine.props.get(i).Draw(gl,50,posy,64,64);
+			   Engine.props.get(i).Draw(gl,posx,posy,tilesize,tilesize);
 	
 				if(i==selectedProp){
-					Engine.spriteRenderer.DrawRect(gl, 50, posy, Engine.props.get(i).getWidth()*32, Engine.props.get(i).getHeight()*32);
+					Engine.spriteRenderer.DrawRect(gl, posx, posy, Engine.props.get(i).getWidth()*32, Engine.props.get(i).getHeight()*32);
 				}
-				   posy+=64+10;
+				   posx+=74;
+				   if(posx>=width-64){
+					   posx=startx;
+					   posy+=74;
+				   }
 			}
 		}
 		Engine.spriteRenderer.setUseTexture(false);

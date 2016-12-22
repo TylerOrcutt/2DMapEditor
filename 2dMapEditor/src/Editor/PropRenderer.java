@@ -33,13 +33,14 @@ super(p.getWidth(),p.getHeight());
 	public void Draw(GL2 gl) {
 		// TODO Auto-generated method stub
 		//super.Draw(gl);
+		float barHeight =5;
 		super.Draw(gl, prop.getPropData());
 	 Engine.spriteRenderer.toggleUseTexture();
 	    gl.glColor3f(0, 0, 1);
 	    if(Tabbar.tabs.size()>1){
-		Engine.spriteRenderer.Draw(gl, 0+Engine.spriteFrame.width, (depthy-super.getCamera().getY())+Tabbar.height,super.getCamera().getWidth(), 5,0	,0,0, 0);
+		Engine.spriteRenderer.Draw(gl, 0+Engine.spriteFrame.width, (depthy-super.getCamera().getY())+Tabbar.height-(barHeight/2),super.getCamera().getWidth(), barHeight,0	,0,0, 0);
 	    }else{
-	    Engine.spriteRenderer.Draw(gl, 0+Engine.spriteFrame.width, (depthy)-super.getCamera().getY(),super.getCamera().getWidth(), 5,0	,0,0, 0);
+	    Engine.spriteRenderer.Draw(gl, 0+Engine.spriteFrame.width, (depthy)-super.getCamera().getY()-(barHeight/2),super.getCamera().getWidth(), barHeight,0	,0,0, 0);
 		    	
 	    }
 		Engine.spriteRenderer.toggleUseTexture();
@@ -53,16 +54,17 @@ super(p.getWidth(),p.getHeight());
 			y+=Tabbar.height;
 		}*/
 		// System.out.println("Got mouse click");
+	//	System.out.println("MouseX: " + x + "   MouseY:"+y);
 		float tempy=y;
 		 if(button==1){
 			 y+=super.getCamera().getY();
 			 if(Tabbar.tabs.size()>1){
-				 y+=Tabbar.height;
+				 y-=Tabbar.height;
 			 }
-					 
+				System.out.println("MouseX: " + x + "   MouseY:"+y);	 
 		//	 x+=super.getCamera().getX();
 			 
-		if(y>=depthy-10 && y<= depthy+10){
+		if(y>=depthy-15 && y<= depthy+15){
 			startDragY=y;
 			dragDepthBar=true;
 			System.out.println("dragging bar");
@@ -99,7 +101,7 @@ super(p.getWidth(),p.getHeight());
 		if(dragDepthBar){
 			y+=super.getCamera().getY();
 			if(Tabbar.tabs.size()>1){
-				y+=Tabbar.height;
+				y-=Tabbar.height;
 			}
 			 System.out.println("DepthY:" + y);
 			depthy=y;
@@ -115,7 +117,7 @@ super(p.getWidth(),p.getHeight());
 		if(dragDepthBar){
 			y+=super.getCamera().getY();
 			if(Tabbar.tabs.size()>1){
-				y+=Tabbar.height;
+				y-=Tabbar.height;
 			}
 			depthy=y;
 			dragDepthBar=false;
