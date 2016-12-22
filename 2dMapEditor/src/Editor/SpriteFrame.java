@@ -11,6 +11,7 @@ public class SpriteFrame {
 	public SpritePalet sp;
 	 public boolean visiable=true;
 	 public boolean sliderDragged=false;
+	 public int selectedProp=0;
 	public SpriteFrame(SpriteSheet sp){
 		this.sp = new SpritePalet(sp);
 		
@@ -20,11 +21,22 @@ public class SpriteFrame {
 		sp.Draw(gl);
 		
 		}else{
-		float posy=0;
+		float startx=10;
+		float posy=10;
+		float posx = 10; 
+		float tilesize=64;
 			for(int i=0;i<Engine.props.size();i++){
-			   Engine.props.get(i).Draw(gl,50,posy);
-			   posy+=Engine.props.get(i).getHeight()*32+10;
-			   
+			
+			   Engine.props.get(i).Draw(gl,posx,posy,tilesize,tilesize);
+	
+				if(i==selectedProp){
+					Engine.spriteRenderer.DrawRect(gl, posx, posy, Engine.props.get(i).getWidth()*32, Engine.props.get(i).getHeight()*32);
+				}
+				   posx+=74;
+				   if(posx>=width-64){
+					   posx=startx;
+					   posy+=74;
+				   }
 			}
 		}
 		Engine.spriteRenderer.setUseTexture(false);
@@ -44,7 +56,9 @@ public class SpriteFrame {
 		width=x;
 		// Engine.grid.generateGrid();
 	}
- 
+ public boolean mouseClick(int button,float x,float y){
+	 return false;
+ }
 	 
 	 
 }

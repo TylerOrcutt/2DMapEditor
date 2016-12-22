@@ -133,6 +133,18 @@ gl.glDisableVertexAttribArray(mTextLoc);
 gl.glDisableVertexAttribArray(vPosition);
 
 }
+public void DrawRect(GL2 gl, float x,float y,float width,float height){
+	float th=5.f;
+	 setUseTexture(false);
+	gl.glColor3f(1, 0, 0);
+	 Engine.spriteRenderer.Draw(gl, x-(th/2.0f), y,width, th,0,0,0,0);//top
+     Engine.spriteRenderer.Draw(gl, x-(th/2.0f), y+height,width+2, th,0,0,0,0);//bottom
+     
+    Engine.spriteRenderer.Draw(gl,  x-(th/2.f), y ,th, height,0,0,0,0);//left
+    Engine.spriteRenderer.Draw(gl,  width+x-(th/2.f), y ,th, height,0,0,0,0);//right
+    // SpriteRenderer.Draw(gl, x+32, y-(width/2),width, 32,0,0,0,0);//top
+setUseTexture(true);
+}
 
 public static FloatBuffer genVertexBuffer(float renderWidth,float renderHeight){
     float recCoords[]=  { 0.f, 0.f, 0.0f,
