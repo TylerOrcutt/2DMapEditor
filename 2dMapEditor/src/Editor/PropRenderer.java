@@ -61,6 +61,7 @@ super(p.getWidth(),p.getHeight());
 			 if(Tabbar.tabs.size()>1){
 				 y-=Tabbar.height;
 			 }
+			
 				System.out.println("MouseX: " + x + "   MouseY:"+y);	 
 		//	 x+=super.getCamera().getX();
 			 

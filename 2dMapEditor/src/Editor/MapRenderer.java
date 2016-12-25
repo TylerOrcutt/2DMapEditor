@@ -56,13 +56,42 @@ public MapRenderer(int width,int height) {
 	public void Draw(GL2 gl) {
 	 
 		super.Draw(gl,mapData);
+		float sy=0;
+		if(Tabbar.tabs.size()>1){
+			sy+=Tabbar.height;
+		}
+		for(int i = 0;i<props.size();i++){
+			propData p =props.get(i); 
+			//p.prop.Draw(gl,  p.x-super.getCamera().getX(),p.y-super.getCamera().getX());
+		
+			p.prop.Draw(gl,super.getCamera(),p.x,p.y,Engine.spriteFrame.width , sy);
+		
+		}
 		
 	}
 
 	@Override
 	public boolean onMouseClick(int button, float x, float y) {
 		// TODO Auto-generated method stub
+		if(Engine.editLayer==1){
+	        if(Engine.selectedProp>Engine.props.size() || Engine.selectedProp<0 || Engine.props.size()==0){
+	        	return false;
+	        }
+	        System.out.println("Adding prop ID: " + Engine.selectedProp );
+	        Prop s = Engine.props.get(Engine.selectedProp);
+	     //    Prop p = new Prop(s.getPropData(),s.getWidth() ,s.getHeight(), x+super.getCamera().getX(),y+ super.getCamera().getY());
+	        if(Tabbar.tabs.size()>1){
+	          y-=Tabbar.height;
+	        }
+	        x-=Engine.spriteFrame.width;
+	        System.out.println("Mouse x: "+ x + "    MouseY:" +y);
+	         props.add(new propData(s,x+super.getCamera().getX(),y+ super.getCamera().getY()));
+		//	props.add(new propData(props.get(Engine.selectedProp),x+super.getCamera().getX(),y+ super.getCamera().getY());
+	        
+	         return true;
+		}else{
 		return super.onMouseClick(button, x, y,width,height,mapData);
+	}
 	}
 
 	@Override

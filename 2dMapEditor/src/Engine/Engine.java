@@ -61,6 +61,8 @@ public class Engine {
   public static int fps=0;
   public static long lastFpsUpdate=0;
   public static int fpsCounter=0;
+  public static int editLayer=0;
+  public static int selectedProp=0;
 	 
   public static boolean initEngine() {
 
@@ -197,7 +199,8 @@ public static void MousePress(MouseEvent e){
 		}
 		
 		if(e.getX()<=spriteFrame.width){
-			spriteFrame.sp.onClick(e,shiftDown);
+			spriteFrame.mouseClick(e, shiftDown);
+			
 			return;
 		}
 		

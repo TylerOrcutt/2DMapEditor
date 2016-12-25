@@ -501,10 +501,27 @@ System.out.println(fc.getSelectedFile().getAbsolutePath());
     
     btn = new JButton("");
     btn.setIcon(new ImageIcon("images/layer1.png"));
+    btn.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+		Engine.editLayer=0;
+		}
+	});
     toolbar.add(btn);
     
     btn = new JButton("");
     btn.setIcon(new ImageIcon("images/layer2.png"));
+    btn.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+		Engine.editLayer=1;
+		System.out.println("Prop layer selected");
+		}
+	});
     toolbar.add(btn);
     
     btn = new JButton("");
