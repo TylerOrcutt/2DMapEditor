@@ -31,7 +31,7 @@ public class SpriteFrame {
 			   Engine.props.get(i).Draw(gl,posx,posy,tilesize,tilesize);
 	
 				if(i==selectedProp){
-					Engine.spriteRenderer.DrawRect(gl, posx, posy, Engine.props.get(i).getWidth()*32, Engine.props.get(i).getHeight()*32);
+					Engine.spriteRenderer.DrawRect(gl, posx, posy, 64, 64);
 				}
 				   posx+=74;
 				   if(posx>=width-64){
@@ -62,8 +62,9 @@ public class SpriteFrame {
 		 int mx = e.getX(),my = e.getY();
 		 //System.out.println("Mouse X: " +mx+ "    Mousey"+my);
 		 int id = (int)((mx/74)+((my/74) * (int)(width/74)));
-		 System.out.println("Mouse X: " +mx+ "    Mousey"+my + "    id" + id);
+		// System.out.println("Mouse X: " +mx+ "    Mousey"+my + "    id" + id);
 		 selectedProp= id;
+		 Engine.selectedProp=id;
 		 
 		 
 	 }else{

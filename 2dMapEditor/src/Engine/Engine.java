@@ -62,7 +62,7 @@ public class Engine {
   public static long lastFpsUpdate=0;
   public static int fpsCounter=0;
   public static int editLayer=0;
-  public static int selectedProp=-1;
+  public static int selectedProp=0;
 	 
   public static boolean initEngine() {
 

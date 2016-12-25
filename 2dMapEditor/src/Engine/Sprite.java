@@ -63,6 +63,19 @@ public class Sprite  {
    }
    
    
+   public void Draw(GL2 gl,SpriteRenderer sr, Camera camera,float x,float y,float scale,float offsetx,float offsety){
+	   if(spriteSheet!=null){
+	   spriteSheet.draw(gl,sr, (offsetx+(x+-camera.getX())*scale),(offsety +(y-camera.getY())*scale), width*scale, height*scale, imgx, imgy);
+	   }else{
+		   float cy = offsety+(y-camera.getY())*scale;
+		   float cx = (offsetx+(x+-camera.getX())*scale);
+ 
+		   
+		   sr.toggleUseTexture();
+		   sr.Draw(gl, cx, cy, width*scale, height*scale, 0, 0,0,0);
+		   sr.toggleUseTexture();
+	   }
+   }
    
    public void Draw(GL2 gl,SpriteRenderer sr,float scale){
 	   if(spriteSheet!=null){

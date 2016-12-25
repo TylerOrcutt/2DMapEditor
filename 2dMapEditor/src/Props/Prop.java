@@ -12,11 +12,19 @@ public class Prop {
 	SpriteSheet sp;
 	Sprite [][]propData;
 	float zline=0;
-	
+	public float x,y;
 	public Prop(int width,int height,Sprite[][]data){
 		this.width=width;
 		this.height = height;
 		this.propData=data;
+	}
+	
+	public Prop(Sprite[][]data, int width,int height,float x,float y){
+		this.width=width;
+		this.height = height;
+		this.propData=data;
+		this.x=x;
+		this.y=y;
 	}
 	public Prop(int width,int height){
 		this.width=width;
@@ -40,7 +48,14 @@ public class Prop {
 		}
 		
 	}
-	
+	public void Draw(GL2 gl,Camera cam,float x,float y,float sx,float sy){
+		for(int i=0;i<width;i++){
+			for(int j=0;j<height;j++){
+			propData[i][j].Draw(gl, Engine.spriteRenderer, cam,x+i*32,y+j*32,1, sx, sy);
+			}
+		}
+		
+	}
 	public void Draw(GL2 gl,float sx,float sy,float dwidth,float dheight){
 		//this.Draw(gl, sx, sy);
 		 

@@ -519,6 +519,7 @@ System.out.println(fc.getSelectedFile().getAbsolutePath());
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 		Engine.editLayer=1;
+		System.out.println("Prop layer selected");
 		}
 	});
     toolbar.add(btn);
