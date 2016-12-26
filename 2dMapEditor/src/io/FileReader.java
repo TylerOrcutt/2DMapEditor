@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
  
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -14,12 +15,14 @@ import Editor.MapRenderer;
 import Editor.PropRenderer;
 import Editor.Tab;
 import Editor.Tabbar;
+import Engine.Engine;
 import Engine.Sprite;
 import Props.Prop;
+import Props.propData;
 import jogamp.opengl.util.av.JavaSoundAudioSink;
 
 public class FileReader {
-	public static String ReadFile(String file){
+	public static String ReadFile(String file,boolean openTab){
 		System.out.println(file);
 		String data="";
 		try{
@@ -28,6 +31,7 @@ public class FileReader {
 		while((line=reader.readLine())!=null){
 		data+=line;
 		}
+		reader.close();
 		// System.out.println(data);
 		  JSONObject jo = (JSONObject) new JSONParser().parse(data);
 		  if(jo.get("Map") != null){
@@ -35,7 +39,7 @@ public class FileReader {
 			  FileReader.ReadMap(jo, file);
 		  }else if(jo.get("Prop")!=null){
 			  //its a prop
-			  FileReader.ReadPop(jo, file);
+			  FileReader.ReadPop(jo, file,openTab);
 		  }
 		  else{
 			  //invalid file
@@ -71,11 +75,7 @@ public class FileReader {
 	 
 	    MapRenderer tab = new MapRenderer(width,height);
 	    JSONArray ja = (JSONArray) jo.get("Blocks");
-	   // System.out.println(ja.size());
-	   
-	    
-	    
-	    for(int i=0;i<ja.size();i++){
+	     for(int i=0;i<ja.size();i++){
 	    	//System.out.println(ja.get(i));
 	    //	JSONObject ob = (JSONObject)ja.get(i);
 	   //    System.out.println(ob.get("y"));
@@ -91,20 +91,66 @@ public class FileReader {
 	    	int imgy= (int)Float.parseFloat(ob.get("imgy").toString()); 
 	    	tab.mapData[x][y].imgx=imgx;
 	    	tab.mapData[x][y].imgy=imgy;
-	    	tab.mapData[x][y].spriteSheet = Engine.Engine.sp.get(0);
+	    	tab.mapData[x][y].spriteSheet = Engine.sp.get(0);
 	    	//System.out.println("X: " + x + "    Y:"+y + "    imgx:" + imgx + "    imgy:" + imgy);
 	       }
 	    
 	    
-	    
+	     
+		     ja = (JSONArray) jo.get("Props");
+		
+		     for(int i=0;i<ja.size();i++){
+		    	//System.out.println(ja.get(i));
+		    //	JSONObject ob = (JSONObject)ja.get(i);
+		   //    System.out.println(ob.get("y"));
+		    	JSONObject ob = (JSONObject)ja.get(i);
+		    	if(ob==null){
+		    		continue;
+		    	}
+		           
+		  
+		    	String name = ob.get("name").toString();
+		    	System.out.println("searching for "+ name);
+		    	Prop pp = null;
+		    	boolean propfound=false;
+		    	for(int p=0;p<Engine.props.size();p++){
+		    	 	//System.out.println("found "+ Engine.props.get(p).name);
+		    		if(Engine.props.get(p).name.equals(name)){
+		    			propfound=true;
+		    			pp=Engine.props.get(p);
+		    		}
+		    	}
+		    	if(!propfound){
+		    		//load prop
+		    		String path = file.split("Maps/")[0];
+		    	   FileReader.ReadFile(path+"/Props/"+name+".prop",false);
+		    	   pp=Engine.props.get(Engine.props.size()-1);
+		    	   
+		    		
+		    		
+		    	    
+		    	}
+		    	
+		    	if(pp!=null){
+		    	float x = Float.parseFloat(ob.get("x").toString());
+		    	float y = Float.parseFloat(ob.get("y").toString());
+		    	propData pd = new propData(pp, x, y);
+		    	tab.props.add(pd);
+		    	
+		    	//System.out.println("X: " + x + "    Y:"+y + "    imgx:" + imgx + "    imgy:" + imgy);
+		       }
+		     }
+	     
+	     System.out.println("Adding map tab  " );
+	     
 	    Tabbar.addTab(tab);
 	    
-		tab.setName(file.split("/")[file.split("/").length-1]);
+		tab.setName(file.split("/")[file.split("/").length-1].split(".map")[0]);
  
 	//	return data;
 	
 }
-public static void ReadPop(JSONObject jo,String file) throws Exception{
+public static Prop ReadPop(JSONObject jo,String file,boolean openTab) throws Exception{
 	 
 
 
@@ -146,19 +192,26 @@ public static void ReadPop(JSONObject jo,String file) throws Exception{
 	    	int imgy= (int)Float.parseFloat(ob.get("imgy").toString()); 
 	    	data[x][y].imgx=imgx;
 	    	data[x][y].imgy=imgy;
-	    	data[x][y].spriteSheet = Engine.Engine.sp.get(0);
+	    	data[x][y].spriteSheet =Engine.sp.get(0);
 	    	//System.out.println("X: " + x + "    Y:"+y + "    imgx:" + imgx + "    imgy:" + imgy);
 	       }
 	    
 	     Prop p = new Prop(width,height,data);
 	     p.setZLine(zbar);
-	    
-	    PropRenderer tab = new PropRenderer(p);
+	     p.name=file.split("/")[file.split("/").length-1].split(".prop")[0];
+	     
+	     System.out.println("adding prop:  '" +p.name+"'");
+	  //   Engine.props.add(p);
+	     
+	    if(openTab){
+	     PropRenderer tab = new PropRenderer(p);
 	    tab.setZBar(zbar);
 	    Tabbar.addTab(tab);
-	    
-		tab.setName(file.split("/")[file.split("/").length-1]);
-
+	    tab.setName(file.split("/")[file.split("/").length-1].split(".prop")[0]);
+	    }else{
+	    	Engine.props.add(p);
+	    }
+	    return p;
 	//	return data;
 	}
 }

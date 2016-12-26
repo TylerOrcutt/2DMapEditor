@@ -9,22 +9,14 @@ import Engine.Engine;
 
 import Engine.Sprite;
 import Props.Prop;
+import Props.propData;
 import Tools.selection;
 import Engine.*;
 
-class propData{
-float x,y;
-Prop prop;
-public propData(){}
-public propData(Prop p,float x,float y){
-	this.prop=p;
-	this.x=x;
-	this.y=y;
-}
-}
+
 public class MapRenderer extends Tab {
 
-ArrayList<propData> props;
+public ArrayList<propData> props;
 int width, height;
 public Sprite[][] mapData;
 
@@ -84,11 +76,30 @@ public MapRenderer(int width,int height) {
 	          y-=Tabbar.height;
 	        }
 	        x-=Engine.spriteFrame.width;
-	        System.out.println("Mouse x: "+ x + "    MouseY:" +y);
-	         props.add(new propData(s,x+super.getCamera().getX(),y+ super.getCamera().getY()));
-		//	props.add(new propData(props.get(Engine.selectedProp),x+super.getCamera().getX(),y+ super.getCamera().getY());
 	        
-	         return true;
+	        
+	        System.out.println("Mouse x: "+ x + "    MouseY:" +y);
+	        if(!Engine.snapToGrid){
+	        props.add(new propData(s,x+super.getCamera().getX(),y+ super.getCamera().getY()));
+	        }else{
+	        	int sx=(int) x,sy=(int) y;
+	        
+	        	float scale = super.getScale();
+	        	Camera cam = super.getCamera();
+	        	sx+=cam.getX()*scale;
+				sx/=(32*scale);
+				sy+=cam.getY()*scale;
+				sy/=32*scale;
+				for(int i=0;i<props.size();i++){
+					propData p = props.get(i);
+					if(p.x==sx && p.y==sy){
+						return false;
+					}
+				}
+				props.add(new propData(s,sx*32,sy*32));
+		        
+	        }
+             return true;
 		}else{
 		return super.onMouseClick(button, x, y,width,height,mapData);
 	}
@@ -150,6 +161,18 @@ public MapRenderer(int width,int height) {
       json+="]";
 		if(props.size()>0){
 			json+=",\"Props\":[";
+			for(int i=0;i<props.size();i++){
+			 propData p = props.get(i);
+				json +="{";	
+				json+="\"name\":\""+p.prop.name+"\","; 
+				json+="\"x\":\""+p.x+"\",";
+				 json+="\"y\":\""+p.y+"\",";
+				json +="}";
+				if(i<props.size()-2){
+					json +=",";						
+				}
+				
+			}
 			json+="]";
 		}
       
@@ -169,6 +192,9 @@ public float getHeight(){
 @Override
 public boolean onMouseDragged(int button, float x, float y) {
 	// TODO Auto-generated method stub
+ 
+		onMouseClick(1, x, y);
+	
 	return false;
 }
 

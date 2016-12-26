@@ -41,6 +41,7 @@ public class Engine {
   public static ArrayList<Sprite> sprites;
   public static Grid grid;
   public static boolean drawGrid=true;
+  public static boolean snapToGrid=true;
   public static boolean ctrlDown=false;
   public static float scale=1.f;
   public static float centerX=0.f;

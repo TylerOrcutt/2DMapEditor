@@ -99,6 +99,8 @@ super(p.getWidth(),p.getHeight());
 	public boolean onMouseDragged(int button, float x, float y) {
 		// TODO Auto-generated method stub
 	//	 System.out.println("Got mouse drag");
+		
+		
 		if(dragDepthBar){
 			y+=super.getCamera().getY();
 			if(Tabbar.tabs.size()>1){
@@ -108,6 +110,8 @@ super(p.getWidth(),p.getHeight());
 			depthy=y;
 			//System.out.println("mouse Dragged");
           return true;
+		}else{
+			
 		}
 		return false;
 	}
@@ -196,6 +200,10 @@ super(p.getWidth(),p.getHeight());
 
 public void setZBar(float z){
 	depthy=z;
+}
+public void setName(String name){
+	super.setName(name);
+	prop.name = name;
 }
 
 }

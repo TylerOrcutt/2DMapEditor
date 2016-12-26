@@ -323,7 +323,7 @@ public class Window extends JFrame{
 			int rp= fc.showOpenDialog(null);
 			 if(rp == JFileChooser.APPROVE_OPTION){
 				 System.out.println("approved");
-				 String data=io.FileReader.ReadFile(fc.getSelectedFile().getPath());
+				 String data=io.FileReader.ReadFile(fc.getSelectedFile().getPath(),true);
 			 }else{
 				 System.out.println("Filed chooser canceled");
 			 }
