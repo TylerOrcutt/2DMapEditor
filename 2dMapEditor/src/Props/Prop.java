@@ -57,6 +57,14 @@ public class Prop {
 		}
 		
 	}
+	public void Draw(GL2 gl,Camera cam,float x,float y,float sx,float sy,float scale){
+		for(int i=0;i<width;i++){
+			for(int j=0;j<height;j++){
+			propData[i][j].Draw(gl, Engine.spriteRenderer, cam,x+i*32,y+j*32,scale, sx, sy);
+			}
+		}
+		
+	}
 	public void Draw(GL2 gl,float sx,float sy,float dwidth,float dheight){
 		//this.Draw(gl, sx, sy);
 		 

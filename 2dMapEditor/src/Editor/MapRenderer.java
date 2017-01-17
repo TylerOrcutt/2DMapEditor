@@ -56,7 +56,7 @@ public MapRenderer(int width,int height) {
 			propData p =props.get(i); 
 			//p.prop.Draw(gl,  p.x-super.getCamera().getX(),p.y-super.getCamera().getX());
 		
-			p.prop.Draw(gl,super.getCamera(),p.x,p.y,Engine.spriteFrame.width , sy);
+			p.prop.Draw(gl,super.getCamera(),p.x,p.y,Engine.spriteFrame.width , sy,super.getScale());
 		
 		}
 		

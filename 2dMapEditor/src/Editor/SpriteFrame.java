@@ -13,6 +13,7 @@ public class SpriteFrame {
 	 public boolean visiable=true;
 	 public boolean sliderDragged=false;
 	 public int selectedProp=0;
+	 private long lastClick=0;
 	public SpriteFrame(SpriteSheet sp){
 		this.sp = new SpritePalet(sp);
 		
@@ -59,14 +60,26 @@ public class SpriteFrame {
 	}
  public boolean mouseClick(java.awt.event.MouseEvent e, boolean shiftDown){
 	 if(Engine.drawProps){
+		 
+		 
 		 int mx = e.getX(),my = e.getY();
 		 //System.out.println("Mouse X: " +mx+ "    Mousey"+my);
 		 int id = (int)((mx/74)+((my/74) * (int)(width/74)));
 		// System.out.println("Mouse X: " +mx+ "    Mousey"+my + "    id" + id);
 		 selectedProp= id;
 		 Engine.selectedProp=id;
-		 
-		 
+		 long curtime= System.currentTimeMillis();
+		 if(curtime-lastClick<=300){
+			//double click;
+			 String name = Engine.props.get(id).name;
+			 PropRenderer tab= new PropRenderer(Engine.props.get(id),false);
+			 Tabbar.addTab(tab);
+			 tab.setName(name);
+			 tab.setZBar(Engine.props.get(id).getZLine());
+			lastClick=0; 
+		 }else{
+		 lastClick =curtime;
+		 }
 	 }else{
 	  sp.onClick(e, shiftDown); 
 	 }	 

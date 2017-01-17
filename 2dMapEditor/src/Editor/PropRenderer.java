@@ -29,6 +29,13 @@ super(p.getWidth(),p.getHeight());
 	Engine.props.add(p);
 	
 }
+public  PropRenderer(Prop p,boolean addToEngine) {
+super(p.getWidth(),p.getHeight());
+	this.prop=p;
+	if(addToEngine){
+	Engine.props.add(p);
+	}
+}
 	@Override
 	public void Draw(GL2 gl) {
 		// TODO Auto-generated method stub
