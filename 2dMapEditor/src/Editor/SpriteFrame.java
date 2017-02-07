@@ -19,6 +19,13 @@ public class SpriteFrame {
 		
 	}
 	public void Draw(GL2 gl){
+	
+	Engine.spriteRenderer.setUseTexture(false);
+	gl.glColor3f(242.f/255.f, 242.f/255.f, 242.f/255.f);
+	//Engine.spriteRenderer.DrawRect(gl, 0, 0, width,Engine.camera.getHeight());
+    Engine.spriteRenderer.Draw(gl,0, 0,width,  Engine.height,0,0,0,0);//top
+	Engine.spriteRenderer.setUseTexture(true);
+
 		if(!Engine.drawProps){
 		sp.Draw(gl);
 		
